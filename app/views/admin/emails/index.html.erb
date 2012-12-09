@@ -1,0 +1,40 @@
+<h2>Listing Emails</h2>
+<hr />
+
+<div style="text-align:center">
+	Sort by: <%= link_to "Newest", admin_emails_path(query_string_hash(:sort_by => "newest")) %> |
+	<%= link_to "Name", admin_emails_path(query_string_hash(:sort_by => "alpha")) %>
+	<%= will_paginate @emails %>
+</div>
+<hr class="space" />
+<hr />
+
+<table>
+	<tr>
+		<th></th>
+		<th>ID</th>
+		<th>Address</th>
+		<th>Is Active</th>
+		<th>Source</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @emails.each do |e| %>
+		<tr>
+			<%= td(link_to "Delete", admin_email_path(e), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td e.id.to_s %>
+			<%= td h(e.address) %>
+			<%= td e.is_active %>
+			<%= td h(e.source) %>
+			<%= td e.created_at.strftime("%x %I:%M %p") %>
+			<%= td e.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @emails %>
+</div>
+<hr class="space" />
+<hr />
+
+<%= link_to 'Back to Admin', admin_index_path %>

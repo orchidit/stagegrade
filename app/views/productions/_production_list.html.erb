@@ -1,0 +1,50 @@
+<% show_grade = true unless local_assigns.has_key?(:show_grade) %>
+<% show_grade_class = (show_grade ? " show-grade" : "") %>
+
+<% if productions.length == 0 %>
+	<div class="center"><h2>No Results</h2></div>
+<% end %>
+
+<% productions.each do |production| %>
+	<div class="round-box production-result<%= show_grade_class %>">
+		<div class="round-box-header">
+			<%= link_to production.play_title, production_path(production) %>
+			<span class="span-3">
+				<%= render :partial => "productions/grade_buy_buttons", :locals => { :production => production, :offset => -9 } %>
+			</span>
+		</div>
+		
+		<div class="production-result-content">
+			<% if show_grade %>
+				<div class="production-result-grades">
+					<span class="small">Critics</span>
+					<% bg = Grading.color_for_score(production.median_score) %>
+					<h2 style="background-color:<%= bg %>">
+						<%= production.median_grade %>
+					</h2>
+					<hr style="margin:4px 0px" />
+					<% user_bg = Grading.color_for_score((user_review_counts[production.id] || 0) > 4 ? production.median_user_score : nil) %>
+					<h2 style="background-color:<%= user_bg %>">
+						<%= production.median_user_grade(user_review_counts[production.id] || 0) %>
+					</h2>
+					<span class="small">Community</span>
+				</div>
+			<% end %>
+			<%= production.next_date_text %><br />
+			Tickets: <%= ticket_price_range(production) %><br />
+			<%= pluralize (review_counts[production.id] || 0), "Critic Review" %> /
+			<%= pluralize (user_review_counts[production.id] || 0), "Community Review" %><br />
+			<div class="production-result-badge-container">
+				<% production.badges.each do |badge| %>
+					<div class="production-badge"><%= badge %></div>
+				<% end %>
+			</div>
+			<br /><br />
+			<div class="production-result-text">
+				<% if !production.synopsis.empty? %>
+					<%= truncate(production.synopsis, :length => 200) %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+<% end %>

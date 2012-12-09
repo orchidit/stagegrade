@@ -1,0 +1,44 @@
+<% content_for :title, "Sign In" %>
+
+<h1>Login</h1>
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 25%;
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+
+</style>
+
+<div class="span-12 border">
+<% form_for @user_session, :url => user_session_path do |f| %>
+	<%= f.error_messages %>
+	<table class="form">
+	<%= tr f.label(:username, "Username or Email"), f.text_field(:username) %>
+	<%= tr f.label(:password), f.password_field(:password) %>
+	<%= tr f.check_box(:remember_me), f.label(:remember_me) %>
+	<%= tr nbsp, "Need a free account?" + nbsp + link_to("Sign up here!", new_user_path) %>
+	</table>
+
+	<div class="prepend-10">
+		<%= f.submit "Login" %>
+	</div>
+<% end %>
+</div>
+
+<div class="span-12 center last">
+	<% link_to "#" do %>
+		<%= image_tag "facebook-signin-button.png", :class => "fb_sign_in", :style => "margin-top:60px" %>
+	<% end %>
+</div>

@@ -1,0 +1,45 @@
+<h2>Listing User Reviews</h2>
+<hr />
+<div style="text-align:center">
+	<div style="text-align:center">
+		Sort by: <%= link_to "Newest", admin_user_reviews_path(query_string_hash(:sort_by => "newest")) %> |
+		<%= link_to "Most Useful", admin_user_reviews_path(query_string_hash(:sort_by => "useful")) %>
+		<%= will_paginate @user_reviews %>
+	</div>
+	<hr class="space" />
+	<hr />
+</div>
+<hr class="space" />
+<hr />
+<table>
+	<tr>
+		<th>Production</th>
+		<th>Posted By</th>
+		<th>Review Text</th>
+		<th style="text-align:center">Useful</th>
+		<th style="text-align:center">Useless</th>
+		<th style="text-align:center">Created At</th>
+		<th style="text-align:center">Actions</th>
+	<% @user_reviews.each do |ur| %>
+		<tr>
+			<td style="width:175px"><%= link_to ur.production.play_title, ur.production %></td>
+			<td style="width:175px"><%= link_to "#{ur.posted_by.name} (#{ur.posted_by.username})",
+				edit_admin_user_path(ur.posted_by) %></td>
+			<td style="width:175px"><%= truncate(h(ur.text), 100) %></td>
+			<td style="text-align:center"><%= ur.up_vote_count %></td>
+			<td style="text-align:center"><%= ur.down_vote_count %></td>
+			<td style="text-align:center;width:120px"><%= ur.created_at.strftime("%x %I:%M %p") %></td>
+			<td style="text-align:center">
+				<%= button "Edit", admin_user_review_path(ur) %>
+				<%= red_button "Delete", admin_user_review_path(ur), :method => :delete %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @user_reviews %>
+</div>
+<hr class="space" />
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

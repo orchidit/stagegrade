@@ -1,0 +1,15 @@
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Title</th>
+		<th>Slug</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	</tr>
+<% @pages.each do |page| %>
+	<%= tr page.id.to_s, link_to(page.title, "/#{page.slug}.html"), page.slug,
+		page.created_at.strftime("%x %I:%M %p"), page.updated_at.strftime("%x %I:%M %p"),
+		button("Edit", edit_admin_page_path(page)),
+		red_button("Delete", admin_page_path(page), :method => :delete) %>
+<% end %>
+</table>

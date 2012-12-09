@@ -1,0 +1,69 @@
+<% content_for :title, "Associate Facebook Account" %>
+
+<style>
+    .form td:first-child, .fieldWithErrors {
+        width: 25%;
+        text-align: right;
+    }
+
+    .form td:first-child, .form td:first-child .fieldWithErrors {
+        float:right;
+    }
+
+    .fieldWithErrors {
+        clear:both;
+    }
+
+    .form td label {
+        font-weight: normal;
+    }
+</style>
+
+<h2>Associate Facebook with StageGrade</h2>
+<hr />
+
+<div class="prepend-4 span-16 append-4 last">
+    You chose to sign in using your Facebook account, but we couldn't find a StageGrade account associated with it.
+    <br /><br />
+    If you already have a StageGrade account, log in using your user name and password and we will automatically link
+    your Facebook account to it. You can unlink it at any time from your user page.
+    <br /><br />
+    If you do not have a StageGrade account, you can create one using information from your Facebook account.
+</div>
+
+<% form_for @user do |f| %>
+    <%= f.error_messages %>
+<% end %>
+
+<hr class="space" />
+
+<div class="span-12 center">
+    <h3>Sign in with your StageGrade account</h3>
+    </div>
+    <div class="span-1 center">
+    <h3>or</h3>
+    </div>
+    <div class="span-11 center last">
+    <h3>Sign up using your Facebook account</h3>
+</div>
+<hr class="space" />
+
+<div class="span-12 colborder">
+<% form_for @user_session, :url => user_session_path do |f| %>
+    <%= f.error_messages %>
+    <table class="form">
+    <%= tr f.label(:username, "Username or Email"), f.text_field(:username) %>
+    <%= tr f.label(:password), f.password_field(:password) %>
+    <%= tr f.check_box(:remember_me), f.label(:remember_me) %>
+    <%= tr nbsp, "Need a free account?" + nbsp + link_to("Sign up here!", new_user_path) %>
+    </table>
+
+    <div class="prepend-6">
+        <%= f.submit "Login" %>
+    </div>
+<% end %>
+</div>
+
+<div class="span-11 center last">
+    <%= link_to "FB Sign Up", "#", :class => "fb_sign_up" %>
+</div>

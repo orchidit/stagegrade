@@ -1,0 +1,84 @@
+<% _prepend = local_assigns.has_key?(:prepend) ? prepend : "5" %>
+<% _span = local_assigns.has_key?(:span) ? span : "20" %>
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 178px;
+		text-align: right;
+	}
+
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+</style>
+<table class="form prepend-<%= _prepend %> span-<%= _span %>">
+<%= tr form.label(:username), form.text_field(:username) %>
+<%= tr form.label(:first_name, "First Name (Private)"), form.text_field(:first_name) %>
+<%= tr form.label(:last_name, "Last Name (Private)"), form.text_field(:last_name) %>
+<%= tr form.label(:email, "Email (Private)"), form.text_field(:email) %>
+<%= tr(form.label(:title), form.text_field(:title)) if is_admin %>
+<%= tr(form.label(:role_id, "Role"), form.collection_select(:role_id, Role.all(:order => "name"), :id, :name)) if is_admin %>
+<%= tr nbsp %>
+<%= tr nbsp, "<span class=\"highlight\">Password must be at least four (4) characters.</span>" %>
+<%= tr form.label(:password, form.object.new_record? ? "Password" : "Change Password"),
+		form.password_field(:password) %>
+<%= tr form.label(:password_confirmation, "Password Confirmation"),
+		form.password_field(:password_confirmation) %>
+
+<% if !form.object.new_record? %>
+	<%= tr nbsp %>
+	<%= tr form.label(:referrer_email, "Referrer's Email"),
+		form.text_field(:referrer_email) + nbsp(2) + "<em>(if you have one)</em>" %>
+	<%= tr form.label(:access_code, "Access Code"),
+		form.text_field(:access_code) + nbsp(2) + "<em>(if you have one)</em>" %>
+	<%= tr form.check_box(:allow_emails),
+		form.label(:allow_emails, "Yes, I would be delighted to receive email updates from StageGrade!") %>
+	<% if form.object.fb_user_id.nil? %>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<% link_to "#" do %>
+					<%= image_tag "facebook-link-button.png", :class => "fb_link_user" %>
+				<% end %>
+			</td>
+		</tr>
+	<% elsif !form.object.is_facebook_only %>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<% link_to "#" do %>
+					<%= image_tag "facebook-unlink-button.png", :class => "fb_unlink_user" %>
+				<% end %>
+			</td>
+		</tr>
+		<% if is_admin %>
+			<%= tr form.label(:fb_user_id), form.object.fb_user_id %>
+			<%= tr form.label(:fb_first_name), form.object.fb_first_name %>
+			<%= tr form.label(:fb_last_name), form.object.fb_last_name %>
+			<%= tr form.label(:fb_email), form.object.fb_email %>
+			<%= tr form.label(:fb_access_token), form.object.fb_access_token %>
+		<% end %>
+	<% end %>
+<% end %>
+</table>
+
+<% if form.object.new_record? %>
+	<%= form.hidden_field(:access_code) %>
+	<%= form.hidden_field(:referrer_email) %>
+	<%= form.hidden_field(:allow_emails, :value => "1") %>
+<% end %>
+<script type="text/javascript">
+	arr = window.location.search.substring(1).split("&");
+	hash = {};
+	for (i=0; i < arr.length;i++){ a=arr[i].split("="); hash[a[0]] = a[1] }
+
+	if (hash["access_code"] != null && hash["access_code"] != undefined) {
+		$("#user_access_code").val(hash["access_code"]);
+	}
+	if (hash["referrer"] != null && hash["referrer"] != undefined) {
+		$("#user_referrer_email").val(decodeURIComponent(hash["referrer"]));
+	}
+</script>

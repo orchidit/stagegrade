@@ -1,0 +1,57 @@
+<% content_for :title, "Sign Up" %>
+<% content_for :description, h(params[:desc]) unless params[:desc].empty? %>
+<% content_for :hide_ads, true %>
+
+<h2>Sign Up</h2>
+<hr />
+<div class="prepend-6 span-14 append-4 last">
+	<h4>
+		Sign up for <strong>a free StageGrade account</strong> and look what you can do:
+		<ul>
+			<li>Write and share <strong>your own theatre reviews!</strong></li>
+			<li>Boost your chances of winning our <strong>weekly Broadway ticket lottery!</strong></li>
+			<li>Be the first to hear about <strong>exclusive ticket discounts!</strong></li>
+		</ul>
+	</h4>
+</div>
+<div style="clear:both"></div>
+<div class="span-24 last">
+	<div class="span-12 center">
+	<h3>Create a StageGrade account</h3>
+	</div>
+	<div class="span-1 center">
+	<h3>or</h3>
+	</div>
+	<div class="span-11 center last">
+	<h3>Sign up using your Facebook account</h3>
+	</div>
+	<hr class="space" />
+
+	<div class="span-12 colborder">
+		<% form_for @user do |f| %>
+			<%= f.error_messages %>
+			<%= render :partial => "users/form", :object => f, :locals => { :prepend => 0, :span => 12 } %>
+			<div class="prepend-3">
+				<%= recaptcha_tags(:ssl => true, :noscript => true) %><br />
+				<%= f.submit "Sign Up" %><br /><br />
+				<span class="small">(You must be at least 13 years old to register with StageGrade.)</span>
+			</div>
+		<% end %>
+	</div>
+	<div class="span-11 center last">
+		<div style="height:200px">
+		</div>
+		<% link_to "#" do %>
+			<%= image_tag "facebook-signup-button.png", :class => "fb_sign_up" %>
+		<% end %>
+	</div>
+</div>
+<script>
+arr = window.location.search.substring(1).split("&");
+hash = {};
+for (i=0; i < arr.length;i++){ a=arr[i].split("="); hash[a[0]] = a[1] }
+
+if (hash["desc"] != null && hash["desc"] != undefined) {
+	$("meta[name='description']").attr("content", decodeURIComponent(hash["desc"]));
+}
+</script>

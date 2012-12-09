@@ -1,0 +1,28 @@
+<div class="content">
+	<div class="news_item_title">
+		<%= link_to production.play_title, production %>
+	</div>
+	<div class="news_item_date">
+		<%= "Posted on #{production.feed_published_at.strftime("%x")}" %>
+	</div>
+
+	<div class="news_item_body">
+		<div class="image">
+			<% link_to production do %>
+				<%= image_tag production.photo.url, :width => "270px", :alt => "Photo from #{production.play_title}" %>
+			<% end %><br />
+			<% if !production.photo_credit.empty? %>
+				<div class="small"><%= "Photo: #{production.photo_credit}" %></div>
+			<% end %>
+		</div>
+		<br />
+		<div class="text">
+		<p class="grade"><%= production.median_grade %></p>
+		<% if local_assigns.has_key?(:excerpt) and excerpt %>
+			<%= simple_format(truncate_html(production.editorial_summary, 300, "... " + link_to("(Read More)", production))) %>
+		<% else %>
+			<%= simple_format production.editorial_summary %>
+		<% end %>
+		</div>
+	</div>
+</div>

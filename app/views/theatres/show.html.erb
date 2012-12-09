@@ -1,0 +1,25 @@
+<% content_for :title, "#{@theatre.name}" %>
+
+<h2><%= @theatre.name %></h2>
+<hr />
+
+<div class="round-box span-6">
+	<div class="round-box-header">Theatre Information</div>
+	<%= !@theatre.address.empty? ? @theatre.address : "<em>No address available</em>" %>
+	<br />
+	<%= !@theatre.phone_number.empty? ? @theatre.phone_number : "<em>No phone number available</em>" %>
+	<br />
+	<%= link_to("Theatre Website", @theatre.link) if !@theatre.link.empty? %>
+</div>
+
+
+<div id="review_list" class="span-13 last">
+	<%= render :partial => "productions/production_list", 
+		:locals => { :productions => @theatre.open_productions + @theatre.closed_productions,
+		:user_review_counts => @user_review_counts, :review_counts => @review_counts,
+		:show_grade => false, :show_explanation => false } %>
+</div>
+
+<div class="span-4" style="padding-left:15px">
+	<%= google_ad_tall %>
+</div>

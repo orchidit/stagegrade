@@ -1,0 +1,23 @@
+<html>
+	<head><title>Spread the word on StageGrade!</title></head>
+	<body>
+		<div align="center"><img src="http://<%= SignupMailer.default_url_options[:host] %>/images/stagegrade_300.png" title="StageGrade Logo" alt="Stagegrade Logo" /></div>
+		<p>
+			Congratulations! Now that you have a free StageGrade account, look what you can do:
+			<ul>
+				<li>Write and share <strong>your own theatre reviews!</strong></li>
+				<li>Be the first to hear about <strong>exclusive ticket discounts!</strong></li>
+ 				<li>Boost your chance of winning our weekly <strong><%= link_to "Broadway ticket lottery", SignupMailer.default_url_options[:host] + "/contest.html" %>!</strong></li>
+			</ul>
+			That's right -- the more you <%= link_to "refer friends to StageGrade", share_account_url %>, the better your odds of winning free tickets, week in and week out! Visit your own personal <%= link_to "StageGrade Sharing Page", share_account_url %> now!
+		</p>
+		<p>
+			Regards,<br />
+			The StageGrade Team
+		</p>
+		<hr />
+		<p style="font-size:0.7em">
+			Don't want to receive emails from StageGrade? Edit your account settings at <%= link_to edit_account_url, edit_account_url %>.
+		</p>
+	</body>
+</html>

@@ -1,0 +1,42 @@
+<h2><%= @user.name + "'s Settings" %></h2>
+<%= flash[:notice] %> 
+<% form_for @user, :url => admin_user_path(@user) do |f| %>
+	<%= f.error_messages %>
+	<%= render :partial => "users/form", :object => f %>
+	<div class="prepend-10">
+		<%= f.submit "Update" %>
+	</div>
+<% end %>
+<hr class="space" />
+<hr />
+
+<h2>Reviews</h2>
+<table id="my_reviews" class="prepend-7 span-17">
+	<tr>
+		<th>Title</th>
+		<th style="width:25%; text-align:center">My Grade</th>
+		<th>Useful</th>
+		<th>Useless</th>
+		<th></th>
+	</tr>
+	<% @user.user_reviews.each do |ur| %>
+		<tr>
+			<%= td link_to(ur.production_play_title, ur.production) %>
+			<td style="text-align:center"><%= ur.grade %></td>
+			<td style="text-align:center"><%= ur.up_vote_count %></td>
+			<td style="text-align:center"><%= ur.down_vote_count %></td>
+			<%= td link_to("Edit", edit_user_review_path(ur), :class => "button") + nbsp(2) +
+				link_to("Delete", ur, :confirm => "Are you sure?", :method => :delete, :class => "button") %>
+		</tr>
+	<% end %>
+</table>
+
+<hr class="space" />
+<hr />
+<h2>Admin</h2>
+<table  class="prepend-7 span-17">
+	<%= tr "Logins", @user.login_count %>
+	<%= tr "Failed Logins", @user.failed_login_count %>
+	<%= tr "Created At", (strftime(@user.created_at, "%x %I:%M %p")) %>
+	<%= tr "Updated At", (strftime(@user.updated_at, "%x %I:%M %p")) %>
+</table>

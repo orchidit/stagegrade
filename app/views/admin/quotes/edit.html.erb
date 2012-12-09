@@ -1,0 +1,6 @@
+<% form_for @quote, :url => admin_quote_path(@quote) do |f| %>
+	<%= f.error_messages %>
+	<%= f.text_area :text, :rows => 6, :style => "height:auto" %><br />
+	<%= f.check_box :is_active %> <%= f.label :is_active, "Make Active" %>
+	<%= f.submit "Update" %>
+<% end %>

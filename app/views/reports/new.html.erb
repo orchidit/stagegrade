@@ -1,0 +1,31 @@
+<h2>Report This Review as Inappropriate</h2>
+<hr />
+
+<style>
+#form label {
+	font-weight:bold;
+}
+</style>
+<% form_for @report, :url => user_review_reports_path do |form| %>
+<div id="form" class="prepend-4 span-16">
+	Thank you for helping StageGrade identify inappropriate content, including:
+	<ul>
+		<li>Spam</li>
+		<li>Obscene or defamatory language</li>
+		<li>Undisclosed conflicts of interest</li>
+	</ul>
+	<%= form.error_messages %>
+	<table>
+		<%= tr form.label(:user_reviewer, "Reviewer"), @user_review.posted_by.username %>
+		<%= tr form.label(:user_review_production, "Production"), @user_review.production_play_title %>
+		<%= tr form.label(:user_review_text, "Review Text"), @user_review.text %>
+		<%= tr nbsp, "<hr />" %>
+		<%= tr nbsp, "<span class=\"highlight\">Tell us what's inappropriate about this review.</span>" %>
+		<tr>
+		 	<td width="140"><%= form.label(:text, "Describe the Problem") %></td>
+			<%= td form.text_area(:text, :rows => 6, :style => "height:auto; width:375px") %>
+		<%= tr nbsp, "Your report will be sent to StageGrade and we will take the appropriate action." %>
+		<%= tr nbsp, form.submit("Submit") %>
+	</table>
+<% end %>
+</div>

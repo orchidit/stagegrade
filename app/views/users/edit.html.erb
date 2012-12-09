@@ -1,0 +1,69 @@
+<% content_for :title, "#{@user.name}'s Settings" %>
+
+<h2><%= @user.name + "'s Settings" %></h2>
+<% if @user.tdf_eligible? %>
+	<div id="tdf_overview" class="center push-4 span-16 notice">
+		You've qualified for an exclusive offer from the Theatre Development Fund (TDF)!
+		<a href="" id="show_tdf">Click here to view the offer.</a>
+	</div>
+	<div id="tdf_details" class="push-4 span-16 notice" style="display:none">
+		<a href="" id="hide_tdf" class="small" style="margin-right: -5px; margin-top: -10px; float:right">Hide</a>
+		<p>Congratulations! Because you've reviewed at least 7 shows over the past 3 months, you can start getting up to 70% off hundreds Broadway and Off-Broadway shows!</p>
+		<p>StageGrade has an exclusive relationship with the Theatre Development Fund (TDF), which will now consider you eligible for a <a href="http://tdf.org/TDF_ServicePage.aspx?id=59&%20do=v" target="_blank">coveted TDF Membership</a> &mdash; the best-kept secret in NYC!</p>
+		<p>It's like having access to the Times Square TKTS booth from your own home, weeks ahead of time. Don't miss this opportunity! <a href="http://www.tdf.org/TDF_SupportPage.aspx?id=28" target="_blank">Apply for your TDF Membership</a>, and print out this StageGrade page to prove your eligibility. Make sure to select "Performing arts professional" when applying.</p>
+		<p style="margin-bottom:0px">(Trust us &mdash; the TDF Membership is well worth the nominal membership fee. You are about to save tons of money...)</p>
+	</div>
+	<script>
+		$(function() {
+			toggle = function() {
+				$("#tdf_overview").slideToggle("slow");
+				$("#tdf_details").slideToggle("slow");
+				return false;
+			}
+			$("#show_tdf").click(toggle);
+			$("#hide_tdf").click(toggle);
+		});
+	</script>
+	<div style="clear: both"></div>
+<% end %>
+<% form_for @user, :url => account_path do |f| %>
+	<%= f.error_messages %>
+	<%= render :partial => "users/form", :object => f %>
+	<div class="prepend-10">
+		<%= f.submit "Save" %>
+	</div>
+<% end %>
+<hr class="space" />
+<hr />
+
+<a name="sharing"></a>
+<h2>Sharing</h2>
+<div class="prepend-1">
+	<h4>
+	Want to boost your chance of winning our weekly Broadway ticket lottery?<br />
+	The more you <strong><%= link_to "refer friends to StageGrade", share_account_url %></strong>, the better your odds!<br />
+	Visit your own personal <strong><%= link_to "StageGrade Sharing Page", share_account_url %></strong> now!
+	</h4>
+</div>
+<hr />
+
+<h2>My Reviews</h2>
+<table id="my_reviews" class="prepend-7 span-17">
+	<tr>
+		<th>Title</th>
+		<th style="width:25%; text-align:center">My Grade</th>
+		<th>Useful</th>
+		<th>Useless</th>
+		<th></th>
+	</tr>
+	<% @user.user_reviews.each do |ur| %>
+		<tr>
+			<%= td link_to(ur.production_play_title, ur.production) %>
+			<td style="text-align:center"><%= ur.grade %></td>
+			<td style="text-align:center"><%= ur.up_vote_count %></td>
+			<td style="text-align:center"><%= ur.down_vote_count %></td>
+			<%= td link_to("Edit", edit_user_review_path(ur), :class => "button") + nbsp(2) +
+				link_to("Delete", ur, :confirm => "Are you sure?", :method => :delete, :class => "button") %>
+		</tr>
+	<% end %>
+</table>

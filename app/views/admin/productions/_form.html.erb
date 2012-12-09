@@ -1,0 +1,191 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 200px;
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+	textarea {
+		height: auto;
+	}
+
+	label {
+		font-weight: normal;
+	}
+</style>
+
+<%= include_markitup("#production_synopsis", "#production_editorial_summary") %>
+
+<% form_for @production, :url => admin_form_path(@production), :html => {:multipart => true} do |form| %>
+	<%= form.error_messages %>
+	<% content_for :jstemplates do -%>
+		<%= "var relationship='#{generate_template(form, :relationships)}'" %>
+	<% end %>
+
+	<table class="form">
+	<%= tr !@production.play.nil? ? link_to("Play Title", edit_admin_play_path(@production.play), :target => "_blank") :
+		form.label(:play_title), text_field_with_auto_complete(:production, :play_title, :style => "width:60%") %>
+	<%= tr !@production.theatre.nil? ? link_to("Theatre Name", edit_admin_theatre_path(@production.theatre),
+		:target => "_blank") : form.label(:theatre_name),
+		form.collection_select(:theatre_id, Theatre.all(:order => 'name'),
+		:id, :name, { :include_blank => true }, { :style => "width: 52%"}) + nbsp(2) +
+		button("Use New", "#", :id => "theatre_toggle") %>
+	<%= tr form.label(:byline), form.text_field(:byline, :style => "width:60%") %>
+
+	<%= tr form.label(:synopsis), form.text_area(:synopsis, :rows => 6) %>
+	<%= tr form.label(:editorial_summary), form.text_area(:editorial_summary, :rows => 6) %>
+
+	<%= tr form.label(:is_playing_override),
+		form.select(:is_playing_override, ["Open", "Closed"], :include_blank => true) %>
+	<%= tr form.label(:preview_date), form.text_field(:preview_date) %>
+	<%= tr form.label(:opening_date), form.text_field(:opening_date) %>
+	<%= tr form.label(:closing_date), form.text_field(:closing_date) %>
+
+	<%= tr form.label(:running_time), form.text_field(:running_time) %>
+	<%= tr form.label(:running_time_text), form.text_field(:running_time_text) %>
+
+	<%= tr form.label(:photo), form.file_field(:photo) %>
+	<%= tr form.label(:photo_credit), form.text_field(:photo_credit, :style => "width:60%") %>
+	<%= tr( nbsp,
+		form.check_box(:is_on_broadway) + form.label(:is_on_broadway) + nbsp(2) +
+		form.check_box(:is_musical) + form.label(:is_musical) + nbsp(2) +
+		form.check_box(:has_stars) + form.label(:has_stars)) %>
+	<%= tr (nbsp,
+		form.check_box(:is_for_adults) + form.label(:is_for_adults) + nbsp(2) +
+		form.check_box(:is_for_families) + form.label(:is_for_families) + nbsp(2) +
+		form.check_box(:is_for_kids) + form.label(:is_for_kids)) %>
+	<%= tr form.label(:posted_by_id, "Posted By"),
+		form.collection_select(:posted_by_id, User.all.select(&:admin?), :id, :name,
+		:selected => @production.posted_by_id || @current_user.id) %>
+	<%= tr "Review Count", "#{pluralize(@production.reviews.length, "review")}" %>
+	<%= tr "Median Grade", @production.calculated_median_grade %>
+	<%= tr nbsp, nbsp %>
+
+	<%= tr("<strong>Ticket Info</strong>")%>
+	<%= tr form.label(:ticket_url), form.text_field(:ticket_url, :style => "width:60%") %>
+	<%= tr form.label(:broadway_com_id, "Broadway.com ID"), form.text_field(:broadway_com_id) %>
+	<%= tr form.label(:min_ticket_price), form.text_field(:min_ticket_price) %>
+	<%= tr form.label(:max_ticket_price), form.text_field(:max_ticket_price) %>
+	<%= tr nbsp, nbsp %>
+
+	<%= tr("<strong>Custom Ad</strong>")%>
+	<%= tr nbsp, form.check_box(:is_show_custom_ad) + form.label(:is_show_custom_ad, "Show Ad") + nbsp(2) +
+		form.check_box(:is_replace_photo) + form.label(:is_replace_photo, "Replace Production Photo") %>
+	<%= tr form.label(:ad, "Custom Ad"), form.file_field(:ad) %>
+	<%= tr form.label(:ad_url, "Ad URL"), form.text_field(:ad_url, :style => "width:60%") %>
+	<%= tr nbsp, nbsp %>
+
+	<%= tr "<strong>Teaser</strong>", "The teaser will go out on Facebook and our RSS feed. " +
+			"It should be same text we use to post to Twitter. Don't include the URL.<br />You still need to post to Twitter manually, " + 
+			"but automatic support for this coming soon." %>
+	<%= tr form.label(:teaser, "Teaser Text"), form.text_area(:teaser, :rows => 3) %>
+	<%= tr nbsp, nbsp %>
+
+	<% if @production.reviews.length > 4 and @production.status == "Draft" %>
+		<%= tr nbsp, "<span class=\"highlight\">This production has more than four reviews. Consider publishing it.</span>" %>
+	<% end %>
+	<%= tr( "<strong>Publishing Options</strong>",
+		form.check_box(:is_published_site) + form.label(:is_published_site, "Publish to Site") + nbsp(2) +
+		form.check_box(:is_published_feed) + form.label(:is_published_feed, "Publish to Feed")) %>
+
+	<%= tr(form.label(:site_published_at, "Site Publish Date"),
+		form.datetime_select(:site_published_at, :include_blank => true, :disabled => "disabled")) %>
+	<%= tr(form.label(:is_site_published_at_override, "Site Publish Date Override") + nbsp(2) +
+		form.check_box(:is_site_published_at_override),
+		form.datetime_select(:site_published_at_override, :include_blank => true)) %>
+
+	<%= tr(form.label(:feed_published_at, "Feed Publish Date"),
+		form.datetime_select(:feed_published_at, :include_blank => true, :disabled => "disabled")) %>
+	<%= tr(form.label(:is_feed_published_at_override, "Feed Publish Date Override") + nbsp(2) +
+		form.check_box(:is_feed_published_at_override),
+		form.datetime_select(:feed_published_at_override, :include_blank => true)) %>
+	</table>
+	<script type="text/javascript">
+		site_pub = "production_is_published_site";
+		feed_pub = "production_is_published_feed";
+		site_check_box = $("#" + site_pub);
+		feed_check_box = $("#" + feed_pub);
+		site_label = $("label[for='" + site_pub + "']");
+		feed_label = $("label[for='" + feed_pub + "']");
+
+		site_override = "site_published_at_override";
+		feed_override = "feed_published_at_override";
+		site_override_check_box = $("#production_is_" + site_override);
+		feed_override_check_box = $("#production_is_" + feed_override);
+		site_override_label = $("label[for='production_is_" + site_override + "']");
+		feed_override_label = $("label[for='production_is_" + feed_override + "']");
+		site_date_select = $("select[id^=production_" + site_override + "]");
+		feed_date_select = $("select[id^=production_" + feed_override + "]");
+
+		enabled_color = "#000";
+		disabled_color = "#aaa";
+
+		site_deps = [site_override_check_box, site_date_select, feed_check_box];
+		feed_deps = [feed_override_check_box, feed_date_select];
+		labels = [feed_label, site_override_label];
+
+		site_check_box_dependency = function() {
+			site_checked = site_check_box.attr("checked");
+			$.each(site_deps, function(i, e) { e.attr("disabled", !site_checked); e.trigger("change"); });
+			$.each(labels, function(i, e) {
+				e.css("color", site_checked ? enabled_color : disabled_color);
+			});
+
+			if (!site_checked) {
+				feed_check_box.attr("checked", false); feed_check_box.trigger("change");
+				site_override_check_box.attr("checked", false); site_override_check_box.trigger("change");
+				feed_override_check_box.attr("checked", false); feed_override_check_box.trigger("change");
+			}
+		}
+
+		feed_check_box_dependency = function() {
+			feed_checked = feed_check_box.attr("checked");
+			$.each(feed_deps, function(i, e) { e.attr("disabled", !feed_checked); e.trigger("change"); });
+			feed_override_label.css("color", feed_checked ? enabled_color : disabled_color);
+
+			if (!feed_checked) {
+				feed_override_check_box.attr("checked", false); feed_override_check_box.trigger("change");
+			}
+		}
+
+		$(site_check_box_dependency);
+		$(feed_check_box_dependency);
+		site_check_box.change(site_check_box_dependency);
+		feed_check_box.change(feed_check_box_dependency);
+
+		$(document).ready(function() {
+			$("#theatre_toggle").toggle(function() {
+				$("#production_theatre_id").replaceWith(
+					"<%= escape_javascript form.text_field(:theatre_name, :style => 'width: 48.5%') %>");
+				$(this).html("Use Existing");
+				return false;
+			}, function() {
+				$("#production_theatre_name").replaceWith(
+					"<%= escape_javascript form.collection_select(:theatre_id, Theatre.all(:order => 'name'), :id, :name, { :include_blank => true }, { :style => 'width: 52%'}) %>");
+				$(this).html("Use New");
+				return false;
+			});
+		});
+	</script>
+<div style="text-align:center">
+	<h3>Relationships</h3>
+	<div id="relationships">
+		<% form.fields_for :relationships do |rel_form| %>
+			<%= render :partial => 'relationship', :locals => { :f => rel_form } %>
+		<% end %>
+	</div>
+	<%= link_to('Add Relationship', '#relationship', 
+			:class => "add_nested_item", :rel => "relationships") %><br /><br />
+	<%= form.submit "Submit" %>
+</div>
+<% end %>

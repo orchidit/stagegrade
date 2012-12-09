@@ -1,0 +1,45 @@
+<h2>Listing Theatres</h2>
+<hr />
+<%= render :partial => "admin/index/anonymous_consolidate", :locals => { :model_name => :theatre } %>
+<br />
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @theatres %>
+</div>
+<hr class="space" />
+<hr />
+
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Productions</th>
+		<th>Address</th>
+		<th>Phone Number</th>
+		<th>Link</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @theatres.each do |t| %>
+		<tr>
+			<%= td(link_to "Edit", edit_admin_theatre_path(t)) %>
+			<%= td(link_to "Delete", admin_theatre_path(t), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td t.id.to_s %>
+			<%= td truncate(t.name, 50, "...") %>
+			<%= td t.productions.count %>
+			<%= td t.phone_number %>
+			<%= td t.address %>
+			<%= td(t.link.nil? ? "" : link_to("Link", t.link)) %>
+			<%= td t.created_at.strftime("%x %I:%M %p") %>
+			<%= td t.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @theatres %>
+</div>
+<hr class="space" />
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

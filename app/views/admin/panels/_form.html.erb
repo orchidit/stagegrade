@@ -1,0 +1,53 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+	textarea {
+		height: auto;
+	}
+
+	label {
+		font-weight: normal;
+	}
+</style>
+
+<% form_for(@panel, :url => (@panel.new_record? ? admin_panels_path : admin_panel_path(@panel)),
+		:html => { :multipart => true }) do |f| %>
+	<%= f.error_messages %>
+	<table class="form">
+		<%= tr f.label(:title), f.text_field(:title) %>
+		<% if !@panel.new_record? %>
+			<%= tr f.label(:order_seq, "Order Seq"), @panel.order_seq %>
+		<% end %>
+		<%= tr f.label(:type), @panel.type %>
+		<%= tr f.label(:items), f.text_area(:items) %>
+		<%= tr f.label(:item_label_method, "Item Label Method"), f.text_field(:item_label_method) %>
+		<%= tr f.label(:item_detail_label_method, "Item Detail Label Method"),
+				f.text_field(:item_detail_label_method) %>
+		<%= tr f.label(:item_url_method, "Item URL Method"), f.text_field(:item_url_method) %>
+		<%= tr f.label(:item_accessory_method, "Item Accessory Method"), f.text_field(:item_accessory_method) %>
+		<%= tr f.label(:image_url_method, "Image URL Method"), f.text_field(:image_url_method) %>
+		<%= tr f.label(:more_text), f.text_field(:more_text) %>
+		<%= tr f.label(:more_url), f.text_field(:more_url) %>
+		<%= tr nbsp, nbsp %>
+		<%= tr("<strong>Image Panel</strong>") %>
+		<% if @panel.is_a? ImagePanel %>
+			<%= tr f.label(:image), f.file_field(:image) %>
+			<%= tr f.label(:unattached_image_url, "Image URL"), f.text_field(:unattached_image_url, :style => "width:60%") %>
+			<%= tr f.label(:image_link), f.text_field(:image_link, :style => "width:60%") %>
+		<% end %>
+		<%= tr nbsp, f.submit("Submit") %>
+	</table>
+<% end %>

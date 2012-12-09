@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<% title = yield(:title) %>
+	<% title_postfix = yield(:title_postfix) || "" %>
+	<% description = yield(:description) %>
+
+	<title><%= (!title.nil? ? title + " | " : "") + "StageGrade" + title_postfix %></title>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<% if description %>
+		<meta name="description" content="<%= description %>" />
+	<% end %>
+	<%= auto_discovery_link_tag(:atom, feed_url) %>
+	<%= stylesheet_link_tag 'blueprint/screen', :media => "screen, projection" %>
+	<%= stylesheet_link_tag 'blueprint/print', :media => "print" %>
+	<%= stylesheet_link_tag 'jqui-tab-theme/jquery-ui-1.7.2.stagegrade' %>
+	<%= stylesheet_link_tag 'application' %>
+	<%= stylesheet_link_tag 'application.new' %>
+	<%= yield :stylesheets %>
+
+	<%= javascript_include_tag 'jquery-1.6.4.min' %>
+	<%= javascript_include_tag 'jrails', 'jrails.autocomplete', 'jquery.inplace.pack' %>
+	<%= javascript_include_tag 'jquery.gchart.min' %>
+	<%= javascript_include_tag 'application' %>
+	<%= javascript_include_tag 'facebook' %>
+	<%= yield :javascripts %>
+	<%= yield :head %>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+    <% javascript_tag do %>
+      <%= yield(:jstemplates) %>
+    <% end -%>
+	<!--[if lt IE 8]>
+    	<%= stylesheet_link_tag 'blueprint/ie', :media => 'screen, projection' %>
+	<![endif]-->
+</head>
+<body>
+	<div id="fb-root"></div>
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+		    appId  : '<%= ENV["FB_APP_ID"] %>',
+		    status : true, // check login status
+		    cookie : true, // enable cookies to allow the server to access the session
+		    xfbml  : true, // parse XFBML
+		    channelURL : '<%= request.host_with_port %>/channel.html', // channel.html file
+		    oauth  : true // enable OAuth 2.0
+		});
+		// FB.Event.subscribe('auth.authResponseChange', function(response) {
+		//   if (response.status == "connected") {
+		//     getMe("/users/fb_connected");
+		//   }
+		// });
+	  };
+
+	  (function() {
+	    var e = document.createElement('script');
+	    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+	    e.async = true;
+	    document.getElementById('fb-root').appendChild(e);
+	  }());
+	</script>
+    <div class="container">
+		<%= render :partial => 'layouts/header' %>
+
+		<div id="content" class="span-24 last">
+			<% if !flash[:notice].empty? %>
+				<div style="text-align:center;color:green;margin-bottom:1em">
+					<%= flash[:notice] %>
+				</div>
+			<% end %>
+			<%= yield %>
+		</div>
+
+		<% if !yield(:hide_ads) %>
+			<hr class="space" />
+			<div class="center">
+				<%= google_ad_wide %>
+			</div>
+		<% end %>
+		<hr class="space" />
+		<hr />
+
+		<div id="footer" class="span-24 last">
+			<p>
+				<%= link_to "Home", root_url %> |
+				<%= link_to "About Us", "/about.html" %> |
+				<%= link_to "Contact Us", "/contact.html" %> |
+				<%= link_to "Privacy and Terms of Use", "/privacy.html" %>
+			<br />
+			Copyright © 2010 StageGrade, LLC. All rights reserved.</p>
+		</div>
+	</div>
+	<%= include_analytics %>
+</body>
+</html>

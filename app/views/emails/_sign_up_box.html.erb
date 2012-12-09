@@ -1,0 +1,27 @@
+<% status = nil unless local_assigns.has_key?(:status) %>
+
+<% if status == :success %>
+	<div id="sign-up" class="success center">
+		You have subscribed!<br />
+		Want to grade shows yourself?<br />
+		Get a <strong><%= link_to "free StageGrade membership", new_user_path(:email_address => session[:email_address]) %></strong>.
+	</div>
+<% elsif status == :failure %>
+	<div id="sign-up" class="error center">
+		Something went wrong:<br />
+		<%= flash[:notice] %><br />
+		<%= render :partial => "emails/sign_up_form", :locals => { :email => @email } %>
+		<% flash[:notice] = nil %>
+	</div>
+<% else %>
+	<div id="sign-up" class="notice center">
+		<% r = rand(2) %>
+		<% if r == 0 %>
+			Join our weekly raffle for <strong>free Broadway tickets!</strong>
+		<% else %>
+			Get <strong>exclusive</strong> ticket discounts!
+		<% end %><br />
+		<% session[:source] = "hp-" + (r == 0 ? "raffle" : "discount") %>
+		<%= render :partial => "emails/sign_up_form" %>
+	</div>
+<% end %>

@@ -1,0 +1,3 @@
+<% reviewers.each do |reviewer| %>
+	<%= render :partial => 'reviewers/reviewer_preview', :locals => { :reviewer => reviewer } %>
+<% end %>

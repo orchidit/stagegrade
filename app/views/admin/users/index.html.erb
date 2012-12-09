@@ -1,0 +1,45 @@
+<h2>Listing Users</h2>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @users %>
+</div>
+<hr class="space" />
+<hr />
+<style>
+th {
+	text-align: center;
+}
+th, td {
+	padding: 4px;
+}
+</style>
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th>ID</th>
+		<th>Name/Username/Login</th>
+		<th style="text-align:center">Allow<br />Emails</th>
+		<th>Role</th>
+		<th>Referrer</th>
+		<th>Created At</th>
+	<% @users.each do |u| %>
+		<tr>
+			<%= td(link_to "Edit", edit_admin_user_path(u)) %>
+			<%= td(link_to "Delete", admin_user_path(u), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td u.id.to_s %>
+			<td style="width:275px"><%= u.name + " (" + u.username + "; " + u.email + ")" %></td>
+			<td style="text-align:center;width:75px"><%= u.allow_emails ? "Y" : "" %></td>
+			<td style="text-align:center"><%= u.role.nil? ? "" : u.role.name %></td>
+			<td style="width:125px"><%= u.referrer_email %></td>
+			<td style="text-align:center"><%= strftime(u.created_at, "%x %H:%M") %></td>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @users %>
+</div>
+<hr class="space" />
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

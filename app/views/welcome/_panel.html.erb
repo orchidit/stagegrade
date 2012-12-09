@@ -1,0 +1,52 @@
+<% cache "panel-#{panel.id}" do %>
+<% div_id = "panel" if local_assigns[:div_id].nil? %>
+
+<% button_span = (panel.has_item_accessory_method? ? 3 : 0) %>
+<% title_span = 9 - button_span %>
+
+<% items = eval(panel.items) %>
+
+<div id="<%= div_id %>">
+	<h2 class="round-box-header"><%= panel.title %></h2>
+
+	<% if panel.is_a? ImagePanel and !panel.image_url.empty? %>
+	<div id="<%= div_id %>-slideshow" class="center panel-slideshow">
+		<% link_to panel.image_link, :id => "#{div_id}-image" do %>
+			<%= image_tag panel.image_url %>
+		<% end %>
+	</div>
+	<% end %>
+
+	<div style="clear:both"></div>
+
+	<table class="panel-list">
+	<% items.each_with_index do |item, i| %>
+		<tr id="<%= "#{div_id}-item-#{i}" %>">
+			<td class="panel-item-title span-<%= title_span %>">
+				<%= link_to panel.item_label_method(item), panel.item_url_method(item) %>
+			</td>
+			<td class="span-1">
+				<%= panel.item_detail_label_method(item) %>
+			</td>
+
+			<% if panel.has_item_accessory_method? %>
+				<td class="span-<%= button_span %> last">
+					<div class="panel-item-image">
+						<% if panel.render_accessory? %>
+							<%= render panel.accessory_render_type(item) => panel.accessory_render_name(item),
+								:locals => panel.accessory_locals(item) %>
+						<% else %>
+							<%= panel.item_accessory_method(item) %>
+						<% end %>
+					</div>
+				</td>
+			<% end %>
+		</tr>
+	<% end %>
+	</table>
+
+	<% if !panel.more_url.empty? %>
+		<div class="panel-more-link center"><%= link_to (panel.more_text.empty? ? "More..." : panel.more_text), eval(panel.more_url) %></div>
+	<% end %>
+</div>
+<% end %>

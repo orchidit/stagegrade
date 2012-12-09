@@ -1,0 +1,32 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 200px;
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+	textarea {
+		height: auto;
+	}
+</style>
+<table class="form">
+<%= tr form.label(:name), form.text_field(:name) %>
+<%= tr form.label(:address), form.text_area(:address, :rows => 3) %>
+<%= tr form.label(:phone_number), form.text_field(:phone_number) %>
+<%= tr form.label(:link), form.text_field(:link) %>
+
+<% unless form.object.new_record? %>
+	<%= render :partial => "admin/index/consolidate", :locals => { :form => form, :model => "theatre" } %>
+<% end %>
+</table>
+<br />

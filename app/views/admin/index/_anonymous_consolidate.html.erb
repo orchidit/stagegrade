@@ -1,0 +1,6 @@
+<em>Enter the ID to map the comma-separated list of duplicate IDs to.</em>
+<% form_for model_name, :url => { :action => "update" } do |form| %>
+	<%= form.label :id, "Map to ID" %> <input id="id" name="id" size="5" type="text">
+	<%= form.label :duplicate_ids, "Duplicate IDs" %> <%= form.text_field :duplicate_ids %>
+	<%= form.submit "Map" %>
+<% end %>

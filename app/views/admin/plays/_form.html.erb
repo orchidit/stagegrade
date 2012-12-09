@@ -1,0 +1,25 @@
+<style>
+	label {
+		font-weight: normal;
+	}
+</style>
+
+<% form_for(@play, :url => (@play.new_record? ? admin_plays_path : admin_play_path(@play))) do |play_form| %>
+	<%= play_form.error_messages %>
+	<% content_for :jstemplates do -%>
+		<%= "var relationship='#{generate_template(play_form, :relationships)}'" %>
+	<% end %>
+
+	<%= play_form.label :title %>&nbsp;&nbsp;&nbsp;<%= play_form.text_field :title %><br />
+
+	<div id="relationships">
+		<% play_form.fields_for :relationships do |rel_form| %>
+			<%= render :partial => 'admin/plays/relationship', :locals => { :f => rel_form } %>
+		<% end %>
+	</div>
+	<%= link_to('Add Relationship', '#relationship', 
+			:class => "add_nested_item", :rel => "relationships") %><br />
+	<%= play_form.submit "Submit" %>
+<% end %>
+
+<br />

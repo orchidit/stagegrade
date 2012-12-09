@@ -1,0 +1,20 @@
+<% offset = -11 unless local_assigns.has_key?(:offset) %>
+
+<% cache "grade_buy-#{production.id}-#{offset}" do %>
+	<% link_to new_production_user_review_path(production) do %>
+		<%= image_tag("grade_it32.png", :alt => "Grade It", :title => "Grade It") %>
+	<% end %>
+
+	<% link_to production, :class => "popup", "data-top-adjust" => offset, :name => "buy-tickets-#{production.id}" do %>
+		<%= image_tag("buy_tickets32.png", :alt => "Click for ticket options", :title => "Click for ticket options") %>
+	<% end %>
+
+	<div class="menu buy-tickets-menu-container" id="buy-tickets-<%= production.id %>">
+		<div class="callout-left"></div>
+		<div class="buy-tickets-menu">
+			<%= broadway_com_callout_links(production) %>
+			<%= ticket_callout_link(production) %>
+			<%= no_tickets_callout_link(production) %>
+		</div>
+	</div>
+<% end %>

@@ -1,0 +1,7 @@
+<h1>Editing Review #<%= @review.id %>: <%= @review.production_play_title %></h1>
+
+<% form_for @review, :url => admin_review_path(@review) do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Update" %>
+<% end %>

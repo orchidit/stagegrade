@@ -1,0 +1,325 @@
+<% content_for :title, "ShowFinder" %>
+<% content_for :javascripts, javascript_include_tag("jquery.ba-hashchange.min") %>
+
+<script type="text/javascript">
+	productionsIndexOnLoad();
+</script>
+
+<style>
+#filter-menus .new-menu-item {
+	text-decoration: none;
+	width: 100%;
+	display: block;
+
+	font-size: 1.1em;
+
+	border: 1px solid transparent;
+	padding: 2px 0px;
+	margin: 0px -1px;
+}
+
+#filter-menus .new-menu-item.selected {
+	background-color: #fff6bf;
+	border-right: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+}
+
+#filter-menus .new-menu-item.selected:hover {
+	background-color: #d66;
+	border: 1px solid black;
+}
+
+#filter-menus .new-menu-item:hover {
+	background-color: #fff6bf;
+	border: 1px solid black;
+}
+
+.filter-options {
+	padding-left: 20px;
+	text-align: left;
+}
+
+.filter-options label {
+	font-size: 1.1em;
+	font-weight: normal;
+}
+
+</style>
+
+<script>
+/**
+ * The menu object expects an element with class "new-menu-items" with children elements
+ * with class "new-menu-item". Selected items also have the "selected" class.
+ *
+ * To use the menu, set the target, url, before (optional), and complete (options)
+ * properties and call menu.init().
+ */
+function Menu() {
+	/**
+	 * The selector for the element to update.
+	 */
+	this.target = null,
+
+	/**
+	 * The URL or a function returning the URL that is called for the AJAX request.
+	 */
+	this.url = null,
+
+	/**
+	 * A function to call before the AJAX request is made.
+	 */
+	this.before = null,
+
+	/**
+	 * A function to call when the AJAX request is completed.
+	 */
+	this.complete = null,
+	/**
+	 * The selector that represents the menu items.
+	 */
+	this.itemSelector = null,
+	/**
+	 * The selector that represents a group of menu items.
+	 */
+	this.groupSelector = null,
+	/**
+	 * The attribute on each item that contains the value.
+	 */
+	this.valueAttribute = "value",
+	/**
+	 * A function which specifies the return value of the click handler. For example, input elements might want to
+	 * return true so that the click selects the element, but links might want to return false so that the browser
+	 * doesn't follow the link.
+	 */
+	this.clickReturns = function() { return true; },
+	this.init = function() {
+		/**
+		 * On ready: select items from hash; load.
+		 * On menu item click: set hash; select items from hash; load.
+		 * On other item click: set hash; select items from hash; load.
+		 */
+		var this_ = this;
+		this.selectItemsFromHash();
+		this.load();
+
+		$(this.itemSelector).live('click', function() {
+			sender = $(this);
+			if (sender.attr("name") != undefined) {
+				var name = sender.attr("name");
+				var value = sender.attr(this_.valueAttribute);
+				var isSelected = this_.utils.isSelected(sender);
+				var isCheckableType = this_.utils.isCheckableType(sender);
+
+				if ((isCheckableType && !isSelected) || (!isCheckableType && isSelected)) {
+					this_.utils.setHashValue(name, null);
+				} else {
+					this_.utils.setHashValue(name, value == undefined || value == "" ? null : value);
+				}
+			}
+			return this_.clickReturns();
+		});
+
+		$(window).bind("hashchange", function(event) {
+			// If the hash changed outside of a menu item, reset the selection and reload.
+			// If it was changed as a result of a menu item, do nothing since selectItem will take care of it.
+			this_.selectItemsFromHash();
+			this_.load();
+		});
+	},
+	// Performs the AJAX request.
+	this.load = function() {
+		this.before instanceof Function ? this.before(this.target) : null;
+		$(this.target).load(this.url instanceof Function ? this.url() : this.url,
+				this.complete instanceof Function ? this.complete() : null);
+	},
+	// Apply hash values to rels hash, get the hash of selected items and set them as selected.
+	this.selectItemsFromHash = function() {
+		var rels = this.getRels();
+		var hash = this.utils.getHashObject();
+
+		for (i in hash) {
+			rels[i] = hash[i];
+		}
+
+		var this_ = this;
+		$(this.groupSelector).children().each(function() {
+			this_.utils.setSelected($(this), false);
+		});
+
+		for (i in rels) {
+			var item = $(this.itemSelector + "[name='" + i + "'][" + this.valueAttribute + "='" + rels[i] + "']");
+			this.utils.setSelected(item, true);
+		}
+	},
+	this.getRels = function() {
+		var allRels = {};
+		$(this.itemSelector).closest(this.groupSelector).children().each(function() {
+			var name = $(this).attr("name");
+			if (name != undefined) {
+				allRels[name] = "";
+			}
+		});
+		return allRels;
+	},
+	this.utils = { };
+	this.utils.setSelected = function(elem, value) {
+		if (this.isCheckableType(elem)) {
+			elem.attr("checked", value);
+		} else {
+			if (value) {
+				elem.addClass("selected");
+			} else {
+				elem.removeClass("selected");
+			}
+		}
+	},
+	this.utils.isSelected = function(elem) {
+		if (this.isCheckableType(elem)) {
+			return elem.attr("checked");
+		} else {
+			return elem.hasClass("selected");
+		}
+	},
+	this.utils.isCheckableType = function(elem) {
+		var type = null;
+		if (elem.attr("type") != undefined) {
+			type = elem.attr("type").toLowerCase();
+		}
+		return (type == "radio" || type == "checkbox");
+	},
+	this.utils.setHashValue = function(key, value) {
+			var hash = this.getHashObject();
+			hash[key] = value;
+			this.setHashObject(hash);
+	},
+	this.utils.setHashObject = function(hash) {
+			var kvArray = new Array();
+
+			for (key in hash) {
+				if (hash[key] != undefined) {
+					kvArray.push(key + "=" + hash[key]);
+				}
+			}
+			window.location.hash = "#" + kvArray.join("&");
+	},
+	this.utils.getHashObject = function(defaults) {
+			var str = window.location.hash.substring(1);
+			if (str == null || str.length == 0) return {};
+
+			var arr = str.split("&");
+			var query = new Object();
+
+			for (i in defaults) {
+				query[i] = defaults[i];
+			}
+
+			for (i in arr) {
+				kv = arr[i].split("=");
+				if (kv.length > 1) {
+					query[kv[0]] = kv[1];
+				}
+			}
+			return query;
+	}
+};
+
+$.ajaxSettings.accepts.html = $.ajaxSettings.accepts.script;
+
+$(document).ready(function() {
+	var filter = new Menu();
+	filter.target = "#results";
+	filter.itemSelector = ".filter-options input";
+	filter.groupSelector = ".filter-options";
+	filter.url = function() { return window.location.pathname + "?" + window.location.hash.substring(1); };
+	filter.before = function(target) { $(target).html("<h2 class=\"center\">Loading...</a>"); };
+	filter.complete = function() { };
+	filter.init();
+
+	var sort = new Menu();
+	sort.target = "#results";
+	sort.itemSelector = ".new-menu-item";
+	sort.groupSelector = ".sort-options";
+	sort.valueAttribute = "rel";
+	sort.clickReturns = function() { return false; };
+	sort.url = function() { return window.location.pathname + "?" + window.location.hash.substring(1); };
+	sort.before = function(target) { $(target).html("<h2 class=\"center\">Loading...</a>"); };
+	sort.complete = function() { };
+	sort.init();
+});
+</script>
+
+<div id="filter-menus" class="span-5">
+	<div class="round-box">
+		<div class="round-box-header">Show Type</div>
+		<div class="filter-options">
+			<%= radio_button_tag "show_type", "" %><%= label_tag "show_type_", "All Types" %><br />
+			<%= radio_button_tag "show_type", "musical" %><%= label_tag "show_type_musical", "Musical" %><br />
+			<%= radio_button_tag "show_type", "play" %><%= label_tag "show_type_play", "Play" %>
+		</div>
+	</div>
+	<div class="round-box">
+		<div class="round-box-header">Venue Type</div>
+		<div class="filter-options">
+			<%= radio_button_tag "on_broadway", "" %><%= label_tag "on_broadway_", "All Venues" %><br />
+			<%= radio_button_tag "on_broadway", "true" %><%= label_tag "on_broadway_true", "Broadway" %><br />
+			<%= radio_button_tag "on_broadway", "false" %><%= label_tag "on_broadway_false", "Beyond Broadway" %>
+		</div>
+	</div>
+
+	<div class="round-box">
+		<div class="round-box-header">Ticket Price</div>
+		<div class="filter-options">
+			<%= radio_button_tag "ticket_price", "" %><%= label_tag "ticket_price_", "All Prices" %><br />
+			<%= radio_button_tag "ticket_price", "under_20" %><%= label_tag "ticket_price_under_20", "Under $20" %><br />
+			<%= radio_button_tag "ticket_price", "under_50" %><%= label_tag "ticket_price_under_50", "Under $50" %><br />
+			<%= radio_button_tag "ticket_price", "under_100" %><%= label_tag "ticket_price_under_100", "Under $100" %><br />
+			<%= radio_button_tag "ticket_price", "under_150" %><%= label_tag "ticket_price_under_150", "Under $150" %>
+		</div>
+	</div>
+
+	<div class="round-box">
+		<div class="round-box-header">Special Features</div>
+		<div class="filter-options">
+			<%= radio_button_tag "special_features", "" %><%= label_tag "special_features_", "All Shows" %><br />
+			<%= radio_button_tag "special_features", "families" %><%= label_tag "special_features_families", "Great for Families" %><br />
+			<%= radio_button_tag "special_features", "stars" %><%= label_tag "special_features_stars", "Stars on Stage" %>
+		</div>
+	</div>
+
+	<div class="round-box">
+		<div class="round-box-header">Dates</div>
+		<div class="filter-options">
+			<%= radio_button_tag "dates", "" %><%= label_tag "dates_", "All Dates" %><br />
+			<%= radio_button_tag "dates", "closing_week" %><%= label_tag "dates_closing_week", "Closing This Week" %><br />
+			<%= radio_button_tag "dates", "closing_month" %><%= label_tag "dates_closing_month", "Closing This Month" %><br />
+			<%= radio_button_tag "dates", "opening_month" %><%= label_tag "dates_opening_month", "New This Month" %>
+		</div>
+	</div>
+
+	<div class="round-box">
+		<div class="round-box-header">Archives</div>
+		<div class="filter-options">
+			<%= radio_button_tag "archives", "" %><%= label_tag "archives_", "Hide Archives" %><br />
+			<%= radio_button_tag "archives", "show" %><%= label_tag "archives_show", "Display Archives" %>
+		</div>
+	</div>
+</div>
+
+<div id="results_container" class="span-14 last">
+	<div class="segmented-control" style="margin-left:15px">
+		<div class="segmented-control-segments sort-options">
+			<%= menu_item "Critics' Grade", :sort => nil %>
+			<%= menu_item "Community Grade", :sort => "community" %>
+			<%= menu_item "Opening Date", :sort => "opening" %>
+			<%= menu_item "Closing Date", :sort => "closing" %>
+			<%= menu_item "Title", :sort => "title" %>
+		</div>
+	</div>
+	<div id="results" class="clear">
+		<div class="center"><h2>Loading...</h2></div>
+	</div>
+</div>
+
+<div class="span-4" style="padding-left:15px">
+	<%= google_ad_tall %>
+</div>

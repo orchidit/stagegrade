@@ -1,0 +1,49 @@
+<h2>Listing Reviews</h2>
+<hr />
+
+<div style="text-align:center">
+	Sort by: <%= link_to "Newest Productions", admin_reviews_path(query_string_hash(:sort_by => "newest_productions")) %> |
+	<%= link_to "Newest Reviews", admin_reviews_path(query_string_hash(:sort_by => "newest_reviews")) %> |
+	<%= link_to "Title", admin_reviews_path(query_string_hash(:sort_by => "alpha")) %>
+	<%= will_paginate @reviews %>
+</div>
+<hr class="space" />
+<hr />
+
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th>ID</th>
+		<th>Play</th>
+		<th>Critic / Publication</th>
+		<th>Grade</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @reviews.each do |r| %>
+		<tr>
+			<%= td(link_to_remote "View", :method => :get, :update => "review_details", :url => admin_review_path(r)) %>
+			<%= td(link_to "Edit", edit_admin_review_path(r)) %>
+			<%= td(link_to "Delete", admin_review_path(r), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td r.id.to_s %>
+			<%= td(link_to r.production_play_title, r.production) %>
+			<%= td link_to(r.critic_name, r.critic) + " / " + link_to(r.publication_name, r.publication) %>
+			<td style="text-align:center"><%= r.grade %></td>
+			<%= td r.created_at.strftime("%x %I:%M %p") %>
+			<%= td r.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+
+<div style="text-align:center">
+	<%= will_paginate @reviews %>
+</div>
+<hr class="space" />
+
+<div id="review_details">
+
+</div>
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

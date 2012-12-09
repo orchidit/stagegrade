@@ -1,0 +1,19 @@
+<style>
+	.fieldWithErrors {
+		display: block;
+	}
+
+	textarea {
+		height: auto;
+	}
+
+	label {
+		font-weight: normal;
+	}
+</style>
+
+
+<h2><%= current_user.name %>'s Review of <em><%= @production.play_title %></em></h2>
+<% form_for @user_review, :url => user_review_path(@user_review) do |form| %>
+	<%= render :partial => "form", :locals => { :form => form } %>
+<% end %>

@@ -1,0 +1,74 @@
+<% content_for :title, "Share" %>
+
+<h2>Share StageGrade</h2>
+<hr />
+<div class="span-24 last center">
+	<h4>
+		Want to boost your chance of winning our weekly <strong><%= link_to "Broadway ticket lottery", "/contest.html" %></strong>?<br />
+		The more you refer friends to StageGrade, the better your odds!
+	</h4>
+</div>
+
+<h2>Set the text you want to share with your friends</h2>
+<hr />
+<div class="prepend-1">
+	<%= text_area :user, :share_text, :rows => 3, :cols => 80,
+		:style => "height: auto; width: auto; padding: 0",
+		:value => "Join me on StageGrade and together we can win free Broadway tickets every week!" %>
+</div>
+
+<div id="char_count" class="prepend-1">
+</div>
+
+<hr class="space" />
+<h2>Share on Facebook, Twitter, or Email</h2>
+<hr />
+
+<div class="prepend-1 large">
+	<%= link_to("Share on Facebook", "http://www.facebook.com/sharer.php?u=" +
+		new_user_url(:referrer => @user.email) + "&desc=",
+		:target => "_blank", :id => :fb_link) %><br />
+
+
+	<%= link_to("Share on Twitter", "http://www.twitter.com/share?url=" + 
+		new_user_url + "?referrer=" + @user.email + "&text=",
+		:target => "_blank", :id => :twitter_link) %><br />
+
+	<%= link_to("Share via Email", "mailto:?subject=Join Me on StageGrade!&body=",
+		:target => "_blank", :id => "email_link") %><br />
+</div>
+
+<script>
+	updateCount = function() {
+		var len = $("#user_share_text").val().length;
+		var charCountDiv = $("#char_count");
+		if (len > 140) {
+			charCountDiv.css({ 'color' : 'red' });
+		} else {
+			charCountDiv.css({ 'color' : 'black' });
+		}
+		charCountDiv.html("" + len + "/140 characters");
+	};
+
+	updateLinks = function() {
+		var text = encodeURIComponent($("#user_share_text").val());
+		var fbLink = $("#fb_link"),
+			twitterLink = $("#twitter_link"),
+			emailLink = $("#email_link");
+
+		var fbHref = fbLink.attr("href");
+		var match = fbHref.match("(.*)&desc=");
+		fbLink.attr("href", ((match != null ? match[1] : fbHref) + "&desc=" + text).replace(/"/g, "%22").replace(/'/g, "%27").replace(/&/g, "%26"));
+
+		twitterLink.attr("href",
+			twitterLink.attr("href").replace(/&text=.*/, "&text=" + text.replace(/%20/g, "+")).replace(/@/g, "%40"));
+		emailLink.attr("href", emailLink.attr("href").replace(/&body=.*/, "&body=" + text +
+			encodeURIComponent("\nClick to sign up: <%= new_user_url(:referrer => @user.email) %>")));
+	};
+
+	updates = function() { updateCount(); updateLinks(); };
+	
+	$("#user_share_text").keyup(function() { setTimeout(updates, 200) });
+	$("#user_share_text").bind('paste', function() { setTimeout(updates, 200) });
+	$(document).ready(updates);
+</script>

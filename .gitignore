@@ -1,0 +1,6 @@
+# Ignore public/system folder (which hosts attachments).
+public/system/*
+log/*
+.ht*
+tmp/*
+config/database.yml

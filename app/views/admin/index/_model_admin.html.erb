@@ -1,0 +1,14 @@
+<% _outer_div_span = 24 %>
+<% _inner_div_span = 8 %>
+<% _outer_div_span = outer_div_span if defined?(outer_div_span) %>
+<% _inner_div_span = inner_div_span if defined?(inner_div_span) %>
+<% _outer_div_span = _inner_div_span * 2 + 1 if _outer_div_span < _inner_div_span * 2 + 1 %>
+
+<div class="span-<%= _outer_div_span %> clear">
+	<div class="span-<%= _inner_div_span %>">
+		<h2><%= link_to "New " + model_name.titleize, send("new_admin_" + model_name.downcase + "_path") %></h2>
+	</div>
+	<div class="span-<%= _inner_div_span %>">
+		<h2><%= link_to edit_link_text, send("admin_" + model_name.downcase.pluralize + "_path") %></h2>
+	</div>
+</div>

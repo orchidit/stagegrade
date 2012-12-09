@@ -1,0 +1,9 @@
+<div class="critic_preview">
+	<div class="content span-11">
+		<p class="name"><%= link_to reviewer.name, reviewer %></p>
+		<div class="sub_title">
+			<p class="num_reviews"><%= pluralize reviewer.published_reviews.length, "Review" %>
+			<%= strftime(reviewer.review_updated_at, "(Latest: %x)") %></p>
+		</div>
+	</div>
+</div>

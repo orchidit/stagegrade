@@ -1,0 +1,7 @@
+<h1>Editing Relationship #<%= @relationship.id %></h1>
+
+<% form_for @relationship, :url => admin_relationship_path(@relationship) do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Update" %>
+<% end %>

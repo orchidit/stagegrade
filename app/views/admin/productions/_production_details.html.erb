@@ -1,0 +1,55 @@
+<h2>
+<%= production.id.to_s + ": " + production.play_title + 
+	" (" + (production.play.id || "--").to_s + ")" %>
+</h2>
+<hr />
+
+<% fields = [ :average_score, :median_score, :theatre_name, :opening_date, :closing_date,
+	:running_time, :running_time_text, :synopsis, :editorial_summary, :photo_credit, :ticket_url,
+	:is_on_broadway, :is_musical, :is_for_adults, :is_for_families, :is_for_kids,
+	:created_at, :updated_at ] -%>
+
+<table>
+	<% fields.each do |field| %>
+		<tr>
+			<%= td field.to_s.humanize.titleize %>
+			<% if production.send(field).nil? %>
+				<%= td "" %>
+			<% elsif production.send(field).is_a? Time %>
+				<%= td(strftime(production.send(field), "%x %I:%M %p")) %>
+			<% elsif production.send(field).is_a? Float %>
+				<%= td(format("%.2f", production.send(field))) %>
+			<% else %>
+				<%= td production.send(field).to_s %>
+			<% end %>
+		</tr>
+	<% end %>
+</table>
+
+<%= image_tag production.photo.url(:original), :style => "width:50%" %><br /><br />
+
+<h3>Relationships</h3>
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th>ID</th>
+		<th>Relationship Type (Default)</th>
+		<th>Custom Connector</th>
+		<th>Name</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	</tr>
+	<% production.relationships.each do |rel| %>
+	<tr>
+		<%= td(link_to "Edit", edit_admin_relationship_path(rel)) %>
+		<%= td(link_to "Delete", admin_relationship_path(rel), :confirm => "Are you sure?", :method => :delete) %>
+		<%= td rel.id.to_s %>
+		<%= td rel.relationship_type.description %>
+		<%= td rel.connector %>
+		<%= td rel.participant_name %>
+		<%= td rel.created_at.strftime("%x %I:%M %p") %>
+		<%= td rel.updated_at.strftime("%x %I:%M %p") %>
+	</tr>
+	<% end %>
+</table

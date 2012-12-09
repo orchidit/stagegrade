@@ -1,0 +1,22 @@
+<% content_for :javascripts do %>
+	<%= javascript_include_tag "jquery.placeholder-1.0.1.min" %>
+<% end %>
+
+<% email = Email.new unless local_assigns.has_key?(:email) %>
+<% remote_form_for email, :url => do_subscribe_email_list_path,
+		:loading => "signUpBox.loading('sign-up-container')",
+		:complete => "signUpBox.complete('sign-up-container')",
+		:update => "sign-up-container",
+		:html => { :class => "new_email suppress-form-error-style" } do |f| %>
+	<%= f.hidden_field(:source, :value => session[:source]) %>
+	<%= f.text_field(:address, :placeholder => "Email address", :size => 26) + nbsp + f.submit("Join") %>
+<% end %>
+<br />
+Want to grade shows yourself?<br />
+Get a <strong><%= link_to "free StageGrade membership", new_user_path %></strong>.
+
+<script>
+	if (!('placeholder' in document.createElement('input'))) {
+		$("#email_address").placeholder({ blankSubmit: true });
+	}
+</script>

@@ -1,0 +1,16 @@
+<h2>
+<%= review.id.to_s + ": " + review.production.play_title + " (#{review.score || "0"})" %>
+</h2>
+<hr />
+
+<table>
+<% posted_by = User.find(review.posted_by_id) if review.posted_by_id and review.posted_by_id > 0 %>
+<%= tr "Posted By", (posted_by.name if posted_by) %>
+<%= tr "Review Date", review.review_date %>
+<%= tr "Critic", review.critic.name %>
+<%= tr "Publication", review.publication.name %>
+<%= tr "Text", review.text %>
+<%= tr "Link URL", link_to_unless(review.link_url.nil?, review.link_url) %>
+<%= tr "Created At", review.created_at.strftime("%x %I:%M %p") %>
+<%= tr "Updated At", review.updated_at.strftime("%x %I:%M %p") %>	
+</table>

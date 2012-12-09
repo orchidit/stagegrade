@@ -1,0 +1,48 @@
+<h2>Report of <%= @report.user_review.posted_by.username %>'s Review</h2>
+<br />
+<div style="text-align:center">
+	<% if @report.reviewed_by_id.nil? %>
+		<%= yellow_button "Mark as Reviewed", review_admin_report_path(@report), :method => :post %>
+	<% else %>
+		<%= yellow_button "Mark as Unreviewed", unreview_admin_report_path(@report), :method => :post %>
+	<% end %>
+	<%= button "Edit User Review", edit_admin_user_review_path(@report.user_review) %>
+	<%= red_button "Delete Report", admin_report_path(@report), :method => :delete %>
+	<%= red_button "Delete User Review", admin_user_review_path(@report.user_review), :method => :delete %>
+</div>
+
+<h3>User Review</h3>
+<hr />
+<table class="form prepend-6 span-18">
+	<%= tr label(:user_reviewer, "Reviewer"), @report.user_review.posted_by.username %>
+	<%= tr label(:user_review_production, "Production"), @report.user_review.production_play_title %>
+	<%= tr label(:user_review_text, "Text"), @report.user_review.text %>
+	<%= tr label(:user_review_has_conflict, "Conflict?"), @report.user_review.has_conflict? ? "Yes" : "No" %>
+	<% if @report.user_review.has_conflict? %>
+		<%= tr label(:user_review_conflict_details, "Disclosure"), @report.user_review.conflict_details %>
+	<% end %>
+</table>
+
+<h3>Report</h3>
+<hr />
+<table class="form prepend-6 span-18">
+	<%= tr label(:report_posted_by, "Reported"), @report.posted_by.username %>
+	<%= tr label(:report_is_spam, "Spam?"), @report.is_spam? ? "Yes" : "No" %>
+	<% if !@report.is_spam? %>
+		<%= tr label(:user_review_text, "Text"), @report.text %>
+	<% end %>
+	<%= tr label(:user_review_reviewed_by, "Reviewed By"),
+		@report.reviewed_by.nil? ? "" : @report.reviewed_by.username %>
+</table>
+<hr />
+
+<div style="text-align:center">
+	<% if @report.reviewed_by_id.nil? %>
+		<%= yellow_button "Mark as Reviewed", review_admin_report_path(@report), :method => :post %>
+	<% else %>
+		<%= yellow_button "Mark as Unreviewed", unreview_admin_report_path(@report), :method => :post %>
+	<% end %>
+	<%= button "Edit User Review", edit_admin_user_review_path(@report.user_review) %>
+	<%= red_button "Delete Report", admin_report_path(@report), :method => :delete %>
+	<%= red_button "Delete User Review", admin_user_review_path(@report.user_review), :method => :delete %>
+</div>

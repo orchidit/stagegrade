@@ -1,0 +1,36 @@
+<% content_for :title, "Subscribe To Our Newsletter" %>
+
+<style>
+label {
+	font-weight: normal;
+}
+</style>
+
+<h2>Subscribe To Our Newsletter</h2>
+
+<hr />
+
+<div class="center" style="font-size: 1.2em">
+	Subscribe to our newsletter to <strong>join our weekly raffle</strong> and <strong>receive exclusive ticket discounts</strong>!<br />
+	If you also want to leave your own reviews, <strong><%= link_to "sign up for an account", new_user_path %></strong> instead.<br />
+	(You must be at least 13 years old to register with StageGrade.)
+</div>
+
+<br />
+
+<% form_for @email, :url => do_subscribe_email_list_path do |f| %>
+	<div class="center">
+		<%= f.error_messages %>
+		<%= f.hidden_field(:source, :value => "sub") %>
+		<%= f.label(:address, "Email address") + nbsp(2) + f.text_field(:address) %>
+		<%= nbsp(2) + f.submit("Subscribe") %>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	arr = window.location.search.substring(1).split("&");
+	hash = {};
+	for (i=0; i < arr.length;i++){ a=arr[i].split("="); hash[a[0]] = a[1] }
+	$("#email_source").val(hash["source"]);
+	$("#email_address").val(hash["address"]);
+</script>

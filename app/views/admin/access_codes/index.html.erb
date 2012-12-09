@@ -1,0 +1,38 @@
+<h2>Access Codes</h2>
+<hr />
+<% form_for @access_code, :url => admin_access_codes_path do |f| %>
+	<%= f.error_messages %>
+		Code: <%= f.text_field :code, :size => "20" %>&nbsp;&nbsp;
+		Email Expression: <%= f.text_field :email_expression, :size => "20" %>&nbsp;&nbsp;
+		Max Uses: <%= f.text_field :max_uses, :size => "5" %>&nbsp;&nbsp;
+		Role: <%= f.collection_select(:role_id, Role.all(:order => "name"), :id, :name) %>&nbsp;&nbsp;
+	<%= f.submit "Create New" %>
+<% end %>
+<br />
+
+<table>
+	<tr>
+		<th></th>
+		<th>ID</th>
+		<th>Code</th>
+		<th>Email Expr.</th>
+		<th>Usage</th>
+		<th>Role</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @access_codes.each do |code| %>
+		<tr>
+			<%= td(link_to "Delete", admin_access_code_path(code), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td code.id.to_s %>
+			<%= td in_place_editor_field code, 'code' %>
+			<%= td in_place_editor_field code, 'email_expression' %>
+			<%= td code.uses.to_s + "/" + in_place_editor_field(code, 'max_uses') %>
+			<%= td in_place_editor_field code, 'role_name', {},
+				:field_type => "select", :select_options => Role.all(:order => "name").map(&:name) %>
+			<%= td code.created_at.strftime("%x %I:%M %p") %>
+			<%= td code.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

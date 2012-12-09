@@ -1,0 +1,23 @@
+<% content_for :title, "#{@publication.name}" %>
+
+<h2><%= @publication.name %></h2>
+<hr />
+
+<div id="left" class="span-5">
+	<%= menu :sort, "Sort",
+		:options => { :class => "span-5", :default => { :sort => :grade_desc } },
+		:items => [[:grade_desc, "Best Grade"], [:grade_asc, "Worst Grade"], [:latest, "Last Updated"]]
+	%>
+	<hr class="space" />
+	<div id="critic_info">
+		<span class="bold">Critics</span><br />
+			<% @publication.critics.each do |crit| %>
+			<%= link_to crit.name, crit %><br />
+		<% end %>
+	</div>
+</div>
+
+<div id="review_list" class="span-16 last">
+	<div class="list_header bold"><h3>Reviews</h3></div>
+	<%= render :partial => "reviews/review", :collection => @reviews %>
+</div>

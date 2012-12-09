@@ -1,0 +1,44 @@
+<br />
+<style>
+	th, td {
+		border-bottom: 1px solid #eee;
+	}
+
+	td {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+</style>
+
+<table>
+	<tr>
+		<th>Production</th>
+		<th>Posted By</th>
+		<th>Review Text</th>
+		<th>Reported By</th>
+		<th>Report Text</th>
+		<th style="text-align:center">Actions</th>
+	<% reports.each do |r| %>
+		<tr>
+			<%= td link_to(r.user_review.production_play_title, r.user_review.production) %>
+			<%= td link_to(r.user_review.posted_by.username, admin_user_path(r.user_review.posted_by)) %>
+			<td style="width:200px"><%= truncate(r.user_review.text, 100) %></td>
+			<%= td link_to(r.posted_by.username, admin_user_path(r.posted_by)) %>
+			<td style="width:200px">
+				<%= r.is_spam? ? "{Spam}" : truncate(r.text, 100) %>
+			</td>
+			<td style="text-align:center">
+				<% if r.reviewed_by_id.nil? %>
+					<%= yellow_button "Mark as Reviewed", review_admin_report_path(r), :method => :post %>
+				<% else %>
+					<%= yellow_button "Mark as Unreviewed", unreview_admin_report_path(r), :method => :post %>
+				<% end %>
+				<%= button "View", admin_report_path(r) %>
+				<%= button "Edit Review", admin_user_review_path(r.user_review) %>
+				<hr class="space" />
+				<%= red_button "Delete Report", admin_report_path(r), :method => :delete %>
+				<%= red_button "Delete Review", admin_user_review_path(r.user_review), :method => :delete %>
+			</td>
+		</tr>
+	<% end %>
+</table>

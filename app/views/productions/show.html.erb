@@ -1,0 +1,111 @@
+<% content_for :title, "#{@production.play_title}" %>
+<% content_for :head do %>
+    <meta property="og:title" content="<%= @production.play_title %>"/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="<%= production_url(@production) %>"/>
+    <meta property="og:image" content="<%= request.protocol + request.host_with_port + @production.photo.url %>" />
+    <meta property="og:site_name" content="StageGrade" />
+    <meta property="fb:admins" content="600343" />
+    <meta property="fb:app_id" content="<%= ENV["FB_APP_ID"] %>" />
+    <meta property="og:description" content="<%= @production.synopsis %>"/>
+<% end %>
+
+
+<script type="text/javascript">
+	productionsShowOnLoad();
+</script>
+
+<div class="span-18">
+	<div id="title" style="float:left; font-size: 2em; margin-right: 10px">
+		<%= @production.play_title %>
+	</div>
+	<div style="margin-top:8px">
+		<%= fb_like production_url(@production) %>
+		<%= twitter_share %>
+	</div>
+</div>
+<hr />
+
+<div class="span-14 colborder">
+	<!-- Tabs -->
+	<div id="review_selector">
+		<a href="#" rel="show=critics" class="selected">Critic Reviews (<%= @production.reviews.count %>)</a>
+		<a href="#" rel="show=community">Community (<%= @production.user_reviews.count %>)</a>
+		<% if current_user %>
+			<a href="#" rel="show=friends">Friends (<%= UserReview.for_production(@production).from_friends_of(current_user).count %>)</a>
+		<% end %>
+	</div>
+	<hr class="space" style="margin-top:-2px" />
+
+	<!-- Reviews Content -->
+	<div id="reviews_pane">
+	</div>
+</div>
+
+<!-- Right Column -->
+<div class="span-8 center">
+	<!-- Custom Ad -->
+	<% if @production.is_show_custom_ad and @production.is_replace_photo and !@production.ad_file_name.nil? %>
+		<% link_to @production.ad_url, :target => "_blank" do %>
+			<%= image_tag @production.ad.url %>
+		<% end %>
+	<% else %>
+	<!-- Photo -->
+		<%= image_tag @production.photo.url, :width => "270px" %>
+		<% if !@production.photo_credit.empty? %>
+			<br /><div class="small"><%= "Photo: #{@production.photo_credit}" %></div>
+		<% end %>
+	<% end %>
+
+	<hr class="space" />
+
+	<!-- Description, Running Time, Dates -->
+	<div class="prepend-2 span-4 append-2">
+		<% @production.badges.each do |badge| %>
+			<div class="production-badge" style="float:none"><%= badge %></div>
+		<% end %>
+	</div>
+
+	<hr class="space" />
+
+	<p><strong>Tickets</strong><br />
+	<% if (@production.min_ticket_price.nil? and @production.max_ticket_price.nil?) or
+		(@production.min_ticket_price == 0 and @production.max_ticket_price == 0) %>
+			Prices Unavailable
+		<% else %>
+			<%= @production.min_ticket_price != 0 ? number_to_currency(@production.min_ticket_price) || "?" : "?" %> -
+			<%= @production.max_ticket_price != 0 ? number_to_currency(@production.max_ticket_price) || "?" : "?" %>
+		<% end %><br />
+	</p>
+
+	<p><b>Running Time</b><br />
+	<%= @production.running_time_display || "<em>Unknown</em>" %>
+	</p>
+	<p><b>Run</b><br />
+	<%= @production.date_text %>
+	</p>
+
+	<!-- Theatre Info -->
+	<b>Theatre Information</b><br />
+	<% if @production.theatre %>
+		<%= link_to @production.theatre.name, @production.theatre %>
+		<% if @production.theatre[:address] %>
+			<br /><%= @production.theatre.address %>
+		<% end %>
+		<% if !@production.theatre.link.empty? %>
+			<br /><%= link_to("Theatre Website", @production.theatre.link, :target => "_blank") %>
+		<% end %>
+	<% else %>
+		<em>No Theatre Listed</em>
+	<% end %>
+
+	<hr class="space" />
+
+	<% if @production.is_show_custom_ad and !@production.is_replace_photo and !@production.ad_file_name.nil? %>
+		<% link_to @production.ad_url, :target => "_blank" do %>
+			<%= image_tag @production.ad.url %>
+		<% end %>
+	<% else %>
+		<%= google_ad_tall %>
+	<% end %>
+</div>

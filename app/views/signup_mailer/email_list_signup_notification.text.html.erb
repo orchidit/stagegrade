@@ -1,0 +1,20 @@
+<html>
+	<head><title>Welcome to the StageGrade Email List!</title></head>
+	<body>
+		<div align="center"><img src="http://<%= SignupMailer.default_url_options[:host] %>/images/stagegrade_300.png" title="StageGrade Logo" alt="Stagegrade Logo" /></div>
+		<p>
+			Thanks for subscribing to our free newsletter!  Now you'll be the first to hear about about exclusive theater ticket deals.
+		</p>
+		<p>
+			And while the StageGrade newsletter lets you know what the critics think, we'd also love to hear what you think. You can publish your own reviews by signing up for a <strong>free StageGrade account</strong>. Visit <%= link_to new_user_url, new_user_url %> to create your free account today.
+		</p>
+		<p>
+			Regards,<br />
+			The StageGrade Team
+		</p>
+		<hr />
+		<p style="font-size:0.7em">
+			Don't want to receive emails from StageGrade? Unsubscribe at <%= link_to unsubscribe_email_list_url, unsubscribe_email_list_url %>.
+		</p>
+	</body>
+</html>

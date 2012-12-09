@@ -1,0 +1,44 @@
+<h2>Listing Relationships</h2>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @relationships %>
+</div>
+<hr class="space" />
+<hr />
+<table>
+	<tr>
+		<th></th>
+		<th></th>
+		<th>ID</th>
+		<th>Rel Type</th>
+		<th>Play/Production</th>
+		<th>Play Title</th>
+		<th>Descriptor</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @relationships.each do |r| %>
+		<tr>
+			<%= td(link_to "Edit", edit_admin_relationship_path(r)) %>
+			<%= td(link_to "Delete", admin_relationship_type_path(r), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td r.id.to_s %>
+			<%= td (r.relationship_type.nil? ? "" : r.relationship_type.name) %>
+			<%= td r.play_or_production %>
+			<% if r.play_or_production == "Play" %>
+				<%= td(link_to r.play_title || "", edit_admin_play_path(r.play)) %>
+			<% else %>
+				<%= td(link_to r.play_title || "", edit_admin_production_path(r.production)) %>
+			<% end %>
+			<%= td (r.connector || "&lt;No Connector&gt;") + " " + 
+					(r.participant.name || "&lt;No Name&gt;") %>
+			<%= td r.created_at.strftime("%x %I:%M %p") %>
+			<%= td r.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<div style="text-align:center">
+	<%= will_paginate @relationships %>
+</div>
+<hr class="space" />
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

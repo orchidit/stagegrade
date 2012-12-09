@@ -1,0 +1,5 @@
+<%= tr "", "" %>
+<%= tr "<strong>Consolidate #{model.capitalize.pluralize}</strong>", 
+		"<em>Enter a comma-separated list of #{model.downcase} IDs to " +
+		"move all references to those #{model.downcase}(s) to this one." %>
+<%= tr form.label(:duplicate_ids, "ID(s)"), form.text_field(:duplicate_ids) %>

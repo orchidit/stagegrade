@@ -1,0 +1,33 @@
+<% content_for :title, "Reviewers" %>
+
+<% tab_class = "span-13" %>
+
+<%= jq_window_ready_tag 'layoutTabs()' %>
+<div id="menu" class="span-5">
+	<%= menu :show, "Show Me", [:all, "Everything"],
+		[:critics, "Only Critics"],
+		[:publications, "Only Publications"]
+	%>
+	<hr class="space" />
+	<%= menu :sort, "Sort By", [:alpha, "Alphabetical"],
+		[:grade_desc, "Best Grade"], [:grade_asc, "Worst Grade"],
+		[:latest, "Last Updated"]
+	%>
+</div>
+<div class="<%= tab_class %>">
+	<%= render :partial => 'reviewers/reviewer_list', :locals => { :reviewers => @reviewers } %>
+</div>
+
+<div class="span-5">
+	<script type="text/javascript"><!--
+	google_ad_client = "pub-7405741267498883";
+	/* Productions/index (160x600, created 2/23/10) */
+	google_ad_slot = "0108501991";
+	google_ad_width = 160;
+	google_ad_height = 600;
+	//-->
+	</script>
+	<script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+	</script>
+</div>

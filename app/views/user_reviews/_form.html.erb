@@ -1,0 +1,64 @@
+<%= form.error_messages %>
+<br />
+<h2>Grade Your Response</h2>
+<hr />
+<style>
+	.score_chooser tr td {
+		padding: 2px;
+		text-align:center;
+	}
+</style>
+<% grading = Grading.all %>
+<table class="score_chooser">
+	<tr>
+		<% grading.each do |g| %>
+			<td style="background-color:<%= g.color %>">
+				<%= form.label("score_#{g.score}0", g.grade) %>
+			</td>
+		<% end %>
+	</tr>
+	<tr>
+		<% grading.each do |g| %>
+			<%= td form.radio_button(:score, g.score.to_f.to_s) %>
+		<% end %>
+	</tr>
+	<tr>
+		<% grading.each do |g| %>
+			<td style="background-color:<%= g.color %>">
+			<%= form.label("score_#{g.score}0", g.descriptor) %>
+			</td>
+		<% end %>
+	</tr>
+</table>
+
+<h2>Write Your Review</h2>
+<hr />
+<div class="prepend-2 span-10">
+	<%= form.text_area(:text, :rows => 10, :style => "align:center; height: auto; width: 100%") %>
+</div>
+<div class="clear"></div>
+<h2>Be Honest</h2>
+<hr />
+StageGrade contributors should be objective and transparent, like any trusted journalist. Let your readers know:<br />
+<div class="prepend-1">
+	<%= form.radio_button(:has_conflict, "false") %>
+	<%= form.label(:has_conflict_false, "I can be completely objective about this show.") %><br />
+	<%= form.radio_button(:has_conflict, "true") %>
+	<%= form.label(:has_conflict_true, "Actually, I have a vested interest in this show. Full disclosure:") %><br />
+	<%= form.text_field(:conflict_details, :style => "width:350px") %><br />
+	<em>(e.g., My brother is the director, I'm an investor, etc)</em>
+</div>
+<br />
+<% if form.object.new_record? and current_fb_session %>
+	<h2>Share</h2>
+	<hr />
+	A post will be added to your wall with a link to this production along with your grade and an excerpt of your review.
+	<br />
+	<div class="prepend-1">
+		<%= form.check_box(:is_send_to_fb, :checked => true) %>
+		<%= form.label(:is_send_to_fb, "Post my review to my Facebook wall") %>
+	</div>
+<% end %>
+<br />
+
+<%= form.submit("Submit") %>

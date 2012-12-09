@@ -1,0 +1,6 @@
+<% plays.each do |play| %>
+	<%= render :partial => 'plays/play_preview', :locals => { :play => play } %>
+<% end %>
+<div style="clear:both;text-align:center">
+	<%= link_to "See All Reviews", reviews_path %>
+</div>

@@ -1,0 +1,7 @@
+<h1>Editing Theatre #<%= @theatre.id %></h1>
+
+<% form_for @theatre, :url => admin_theatre_path(@theatre) do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Update" %>
+<% end %>

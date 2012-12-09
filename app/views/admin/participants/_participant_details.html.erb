@@ -1,0 +1,7 @@
+<h1><%= participant.id.to_s + ": " + participant.name + " (#{participant.person_or_company})"%></h1>
+<br />
+<h2>Relationships</h2>
+<table>
+<% participant.relationships.each do |rel| %>
+	<%= "#{rel.relationship_type ? rel.relationship_type.name.capitalize : ""}: \"#{rel.play_title} #{rel.connector}\"" %>
+<% end %>

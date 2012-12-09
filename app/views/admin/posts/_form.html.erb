@@ -1,0 +1,72 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 200px;
+		text-align: right;
+		margin-top: 5px;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.form td {
+		padding-top: 0px;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	textarea {
+		height: auto;
+	}
+
+	label {
+		font-weight: normal;
+	}
+</style>
+
+<%= include_markitup("#post_text") %>
+
+<% form_for @post, :url => admin_form_path(@post) do |f| %>
+	<%= f.error_messages %>
+	<%= f.hidden_field :user_id, :value => (@post.user_id || current_user.id) %>
+	<table class="form">
+		<%= tr f.label(:title), f.text_field(:title, :style => "width:45%") %>
+		<%= tr f.label(:text), f.text_area(:text, :rows => 6) %>
+		<%= tr f.label(:cutoff_length), f.text_field(:cutoff_length) + nbsp(2) + "<em>(Default is 300. Leave blank to show full post.)</em>" %>
+		<%= tr nbsp, nbsp %>
+		<%= tr nbsp, "<strong>Publishing Options</strong>" %>
+		<%= tr nbsp, f.check_box(:is_published) + f.label(:is_published, "Publish") %>
+		<%= tr nbsp, f.check_box(:is_published_at_override) + f.label(:is_published_at_override, "Override Publish Date") %>
+		<%= tr nbsp, f.datetime_select(:published_at_override, :include_blank => true) %>
+		<%= tr nbsp, f.submit("Submit") %>
+	</table>
+<% end %>
+
+<script type="text/javascript">
+	enabled_color = "#000";
+	disabled_color = "#aaa";
+
+	publish_fn = function() {
+		checked = $("#post_is_published").attr("checked");
+
+		$("label[for='post_is_published_at_override']").css("color", checked ? enabled_color : disabled_color);
+
+		override_check_box = $("#post_is_published_at_override");
+		override_check_box.attr("disabled", !checked);
+		if (!checked) {
+			override_check_box.attr("checked", false);
+		}
+		override_check_box.trigger("change");
+	};
+	
+	override_fn = function() {
+		checked = $("#post_is_published_at_override").attr("checked");
+		$("select[id^=post_published_at_override]").attr("disabled", !checked);
+	};
+
+	$("#post_is_published").change(publish_fn);
+	$("#post_is_published_at_override").change(override_fn);
+	$(publish_fn);
+</script>

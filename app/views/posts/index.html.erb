@@ -1,0 +1,32 @@
+<% content_for :title, "News Posts" %>
+
+<div class="center span-24 last">
+	<hr />
+	<%= will_paginate @paged_feed %>
+	<hr class="space" />
+	<hr />
+</div>
+
+<div class="prepend-1 span-17">
+	<% @paged_feed.each do |post| %>
+		<div class="news_item">
+			<% if post.is_a? Production %>
+				<%= render :partial => 'productions/post', :locals => { :production => post, :excerpt => false } %>
+			<% else %>
+				<%= render :partial => 'posts/post', :locals => { :post => post, :excerpt => false } %>
+			<% end %>
+			<hr />
+		</div>
+	<% end %>
+</div>
+
+<div id="advert" class="push-1 span-5 last">
+	<%= google_ad_tall %>
+</div>
+
+<div class="center span-24 last">
+	<hr />
+	<%= will_paginate @paged_feed %>
+	<hr class="space" />
+	<hr />
+</div>

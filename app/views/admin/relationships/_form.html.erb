@@ -1,0 +1,31 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 200px;
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+	textarea {
+		height: auto;
+	}
+</style>
+
+<table class="form">
+<%= tr form.label(:play_title), text_field_with_auto_complete(:relationship, :play_title) %>
+<%= tr form.label(:relationship_type_id, "Relationship Type"),
+	form.collection_select(:relationship_type_id, RelationshipType.all, :id, :description) %>
+<%= tr form.label(:custom_connector, "Custom Connector"),
+	form.text_field(:custom_connector, :placeholder => "Custom Connector") %>
+<%= tr form.label(:participant_name), text_field_with_auto_complete(:relationship, :participant_name) %>
+</table>
+<br />

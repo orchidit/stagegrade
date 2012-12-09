@@ -1,0 +1,7 @@
+<h1>New Relationship</h1>
+
+<% form_for @relationship, :url => new_admin_relationship_path do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Create" %>
+<% end %>

@@ -1,0 +1,41 @@
+<% 
+	link_title = show_title = show_critic = show_publication = true
+	span = "span-13"
+	case @controller.controller_name
+	when "productions"
+		show_title = link_title = false
+		span = "span-11"
+	when "critics"
+		show_critic = false
+	when "publications"
+		show_publication = false
+	end
+%>
+
+<div class="review_preview clear">
+	<div class="meta span-1 border">
+		<p class="grade"><%= review.grade %></p>
+	</div>
+	<div class="content <%= span %>">
+		<% if show_title and link_title %>
+			<p class="title"><%= link_to review.production.play.title, review.production %></p>
+		<% elsif show_title %>
+			<p class="title"><%= review.production.play.title %></p>
+		<% end %>
+		<p class="byline <%= "bold" if !show_title%>">
+			<% if show_critic and show_publication %>
+				<%= ["#{review.critic_name || "No Critic"}, <em>#{review.publication_name || "No Publication"}</em>"] %>
+			<% elsif show_critic %>
+				<%= review.critic_name || "No Critic" %>
+			<% elsif show_publication %>
+				<em><%= review.publication_name || "No Publication" %></em>
+			<% end %>
+		</p>
+		<div class="text">
+			<%= simple_format(review.text.to_s + 
+				(review.link_url.empty? ? "" :
+					(" " + link_to("(Read Full Review)", review.link_url, :target => "_blank")
+				))) %>
+		</div>
+	</div>
+</div>

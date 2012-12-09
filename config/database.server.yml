@@ -1,0 +1,26 @@
+development:
+    adapter: mysql
+    database: stagegrade_dev
+    pool: 5
+    username: rails_dev_user
+    password: rails_dev_user_password
+    host: db.stagegrade.com
+    port: 3306
+
+test:
+    adapter: mysql
+    database: stagegrade_test
+    pool: 5
+    username: mg_test_user
+    password: mg_test_user_password
+    host: db.stagegrade.com
+    port: 3306
+
+production:
+    adapter: mysql
+    database: stagegrade
+    pool: 5
+    username: rails_prod_user
+    password: rails_prod_user_password
+    host: db.stagegrade.com
+    port: 3306

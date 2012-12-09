@@ -1,0 +1,30 @@
+<h2>Listing Relationship Types</h2>
+<hr />
+<% form_for @relationship_type, :url => admin_relationship_types_path do |f| %>
+	<%= f.error_messages %>
+	<%= f.label :name %> <%= f.text_field :name %>&nbsp;&nbsp;
+	<%= f.label :default_connector %> <%= f.text_field :default_connector %>
+	<%= f.submit "Create New" %>
+<% end %>
+<br />
+<table>
+	<tr>
+		<th></th>
+		<th>ID</th>
+		<th>Name</th>
+		<th>Default Connector</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+	<% @relationship_types.each do |rt| %>
+		<tr>
+			<%= td(link_to "Delete", admin_relationship_type_path(rt), :confirm => "Are you sure?", :method => :delete) %>
+			<%= td rt.id.to_s %>
+			<%= td in_place_editor_field rt, 'name' %>
+			<%= td in_place_editor_field rt, 'default_connector' %>
+			<%= td rt.created_at.strftime("%x %I:%M %p") %>
+			<%= td rt.updated_at.strftime("%x %I:%M %p") %>
+		</tr>
+	<% end %>
+</table>
+<hr />
+<%= link_to 'Back to Admin', admin_index_path %>

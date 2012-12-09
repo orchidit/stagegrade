@@ -1,0 +1,29 @@
+<% vote = current_user.nil? ? nil : user_review.vote_by_user(current_user.id) %>
+<% button = direction == :up ? :green_button : :red_button %>
+<% name = direction == :up ? "Useful" : "Useless" %>
+<% method = direction == :up ? :up_vote_count : :down_vote_count %>
+<% route = direction == :up ? :vote_up_user_review_path : :vote_down_user_review_path %>
+<% remote = !current_user.nil? %>
+
+<% if current_user.nil? %>
+	<%= send button, "#{name} (#{user_review.send(method)})", new_user_session_path %>
+<% elsif current_user.id == user_review.posted_by_id %>
+	<span class="disabled <%= button.to_s.gsub('_', ' ') %>"><%= name + " (#{user_review.send(method)})" %></span>
+<% elsif vote.nil? or vote.up != (direction == :up) %>
+	<%= send button, "#{name} (#{user_review.send(method)})", send(route, user_review),
+		:method => :post, :suppress_confirm => true, :remote => remote,
+		:loading => "votingButtons.loading(#{user_review.id}, '#{direction}')",
+		:success => "votingButtons.complete(#{user_review.id})",
+		:update => "vote_#{direction}_#{user_review.id}" %>
+<% else %>
+	<%= send button, "#{name} (#{user_review.send(method)})",
+		undo_vote_user_review_path(user_review),
+		:method => :delete, :suppress_confirm => true, :remote => remote, :selected => true,
+		:loading => "votingButtons.loading(#{user_review.id}, '#{direction}')",
+		:success => "votingButtons.complete(#{user_review.id})",
+		:update => "vote_#{direction}_#{user_review.id}" %>
+<% end %>
+
+<script>
+votingButtons.complete(<%= user_review.id %>);
+</script>

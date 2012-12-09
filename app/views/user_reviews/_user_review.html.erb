@@ -1,0 +1,67 @@
+<% 
+	link_title = show_title = show_critic = show_publication = true
+	span = "span-13"
+	case @controller.controller_name
+	when "productions"
+		show_title = link_title = false
+		span = "span-11"
+	when "critics"
+		show_critic = false
+	when "publications"
+		show_publication = false
+	end
+%>
+
+<div id="user_review_<%= user_review.id %>" class="review_preview clear">
+	<div class="meta span-1 border">
+		<p class="grade">
+			<%= user_review.grade %>
+		</p>
+	</div>
+
+	<div class="content <%= span %>">
+		<p class="byline bold"><%= user_review.posted_by.username %></p>
+		<!-- Review Text and Disclosure -->
+		<div class="text">
+			<%= h(user_review.text).gsub("\r\n", "<br />").gsub("\n", "<br />") %>
+		</div>
+		<br />
+		<% if user_review.has_conflict? %>
+			<div class="notice" style="padding:0.5em;border:2px solid #fff6bf;background-color:#fffbe0">
+				<%= "<strong>Full Disclosure: </strong>" + h(user_review.conflict_details) %>
+			</div>
+		<% end %>
+
+		<!-- User Voting -->
+		<span class="button disabled">Was this review...?</span>
+		<span id="vote_buttons_<%= user_review.id %>">
+			<span id="vote_up_<%= user_review.id %>">
+				<%= render :partial => "user_reviews/vote_button",
+					:locals => { :user_review => user_review, :direction => :up } %>
+			</span>
+			<span id="vote_down_<%= user_review.id %>">
+				<%= render :partial => "user_reviews/vote_button",
+					:locals => { :user_review => user_review, :direction => :down } %>
+			</span>
+		</span>
+
+		<div class="small" style="float:right">
+		<!-- Spam/Conflict of Interest -->
+		<% if current_user.nil? %>
+			<%= link_to "Spam", new_user_session_path %> |
+			<%= link_to "Inappropriate", new_user_review_report_path(user_review) %>
+		<% elsif user_review.posted_by_id != current_user.id %>
+			<% if current_user.has_reported?(user_review.id) %>
+				Flagged
+			<% else %>
+				<%= link_to "Spam", spam_user_review_reports_path(user_review), :method => :post %> |
+				<%= link_to "Inappropriate", new_user_review_report_path(user_review) %>
+			<% end %>
+		<% else %>
+		<!-- Edit/Delete -->
+			<%= link_to "Edit", edit_user_review_path(user_review) %> |
+			<%= link_to "Delete", user_review_path(user_review), :method => :delete %>
+		<% end %>
+		</div>
+	</div>
+</div>

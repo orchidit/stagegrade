@@ -1,0 +1,614 @@
+/* From scaffold.css */
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+/* End From scaffold.css */
+
+#form label {
+	float: right;
+	font-weight: normal;
+}
+
+a {
+	color: #222;
+}
+
+.plain {
+	text-decoration: none;
+	color: black;
+}
+
+.small {
+	margin-bottom: 0;
+}
+
+#header h1 {
+	float:left;
+	margin-bottom: 0;
+	font-size: 4em;	
+	text-shadow: white 0 2px 0;
+}
+
+#logo {
+}
+
+#header_right {
+	margin-left: 10px;
+	text-align:right;
+}
+
+#header_right_buttons {
+	margin-top: 6px;
+}
+
+.nav_bar ul, .top_nav_bar ul {
+	float: left;
+	list-style: none; 
+	position: relative; 
+	vertical-align: middle;
+	margin-bottom: 1em;
+	margin-right: 0;
+	padding-left: 0;
+}
+
+.top_nav_bar ul {
+	margin-bottom: 0px;
+}
+
+.nav_bar li, .top_nav_bar li {
+	position: relative; 
+	float: left;
+	text-align: center;
+}
+
+.nav_bar li a {
+	display: block;
+	font-size: 1.2em;
+	color: black;
+	text-decoration: none;
+}
+
+.top_nav_bar li a {
+	font-size: 1em;
+	color: black;
+}
+
+.nav_bar li:first-child, .top_nav_bar li:first-child {
+	border-left: solid 0px #aaa;
+}
+
+.nav_bar li, .top_nav_bar li {
+	border-left: solid 1px #aaa;
+/*	background: -webkit-gradient(linear, left top, left bottom, 
+				from(#eee), to(#aaa));
+*/}
+
+.nav_bar li:hover {
+/*	background: -webkit-gradient(linear, left top, left bottom, 
+				from(#ccc), to(#888));*/
+}
+
+#footer {
+	text-align: center;
+}
+
+hr.line_without_space {
+	margin-bottom: 0;
+}
+
+td h2 { font-size: 2em; margin:0.1em; vertical-align: middle; }
+
+h2 {
+	margin-bottom: 0;
+}
+
+h3 {
+	margin-bottom: 0;
+}
+
+.list_header h3 {
+	text-align: center;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+#play_info {
+	text-align: center;
+}
+
+#average_grade, #median_grade, #grade {
+	text-align: center;
+}
+
+#average_grade h1, #median_grade h1, #grade h1 {
+	border: 1px solid #eee;
+	font-size: 6em;
+	margin-bottom: 0;
+}
+
+#review_info {
+	text-align: center;
+}
+
+#review_text {
+	margin-left: 12px;
+}
+
+#critic_info {
+	text-align: center;
+}
+
+#theatre_info {
+	text-align: center;
+}
+
+/**
+ * Menu
+ */
+
+#critic_info {
+	padding: .2em .1em .2em .4em;
+	padding-left: 3.9em;
+}
+
+#menu ul {
+	list-style-type:none;
+	margin-bottom: 1em;
+}
+
+
+#menu li.menu_title {
+	float: left;
+	padding: .2em .1em .2em .2em;
+	margin-bottom: 0.2em;
+	text-align: center;
+	border: 1px solid black;
+	border-bottom-width: 1px;
+	font-weight: bold;
+}
+
+#menu li.menu_title {
+	color: black;
+	font-weight: bold;
+}
+
+.menu_item:last-child, .menu_item:last-child:hover {
+	border: 1px solid black;
+	border-top-color: white;
+}
+
+.menu_item a {
+	width: 100%;
+	display:block;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+.menu_item {
+	float: left;
+	padding: .2em .1em .2em .2em; 
+	text-align: center;
+	
+	background-color: #fff;
+}
+
+.menu_item:hover {
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	background-color: #ffc;
+}
+
+.menu_item_first:hover {
+	border-top-color: black;
+}
+
+.menu_item_last:hover {
+	border-bottom-color: black;
+}
+
+.menu_item.selected {
+	border: 1px solid #444;
+	background-color: #ddd;
+}
+
+.menu_item.selected a {
+	color: #000;
+}
+
+.menu_item li {
+	width: 100%;
+	margin: 0 -1px .2em 0;
+}
+
+.menu_item {
+	border: 1px solid black;
+	border-top-color: white;
+	border-bottom-color: white;
+}
+
+.menu_item_first {
+	border: 1px solid black;
+	border-bottom-color: white;
+}
+
+/**
+ * Production List
+ */
+table.production_list {
+	padding-left: 5px;
+	margin-bottom: 0em;
+}
+
+table.production_list td {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+/**
+ * Review Preview
+ */
+.review_preview {
+	padding-left: 10px;
+	text-align:left;
+}
+
+.review_preview p {
+	margin-bottom: 0;
+}
+
+.review_preview .meta {
+	text-align: center;
+	width: 40px;
+	padding-top: 1em;
+	margin-left: 5px;
+	padding-left: 4px;
+	margin-bottom: 3em;
+	border: 1px solid #eee;
+}
+
+.review_preview .content {
+	padding: 0.5em;
+	margin-bottom: 3em;
+	border-bottom: 1px solid #eee;
+}
+
+.review_preview p.grade {
+	text-align: center;
+	font-size: 2.2em;
+	padding-bottom: 0.5em;
+}
+
+.review_preview p.votes {
+	text-align: center;
+	font-size: 2.2em;
+}
+
+.review_preview .date {
+	line-height: 1em;
+	color: #777;
+}
+
+.review_preview .title {
+	font-size: 1.3em;
+}
+
+.review_preview .text {
+	padding-top: 1em;
+}
+
+/**
+ * News
+ */
+
+.box_header, #news_header, #qotw_header {
+	font-size: 1.2em;
+	text-align: center;
+}
+
+.box_body, #news_body, #qotw_body {
+	border-right: 1px solid #eee;
+	border-left: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+.box_body p, #qotw_body p {
+	text-align: left;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 0;
+}
+
+.news_item {
+	margin-left: 0px;
+}
+
+.news_item_title {
+	padding-left: 5px;
+	font-size: 1.5em;
+}
+
+.news_item_date {
+	padding-left: 5px;
+	color: #aaa;
+	padding-bottom: .25em;
+}
+
+.news_item_body {
+	margin-left: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.news_item_body_bordered {
+	border-left: 1px solid #eee;
+	margin-left: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.news_item_body p.grade {
+	font-size: 2em;
+	float:left;
+	border: 1px solid #ccc;
+
+	padding: 10px 5px;
+	margin: 5px;
+	margin-right: 10px;
+}
+
+.news_item_body .image {
+	text-align: center;
+}
+
+/**
+ * Critic Preview
+ */
+
+.critic_preview {
+	text-align: left;
+	overflow: hidden;
+	margin-left: 10px;
+	margin-right:0;
+	margin-bottom: 1em;
+}
+
+.critic_preview p {
+	margin-bottom: 0;
+}
+
+.critic_preview .meta {
+	text-align: center;
+	font-size: 2em;
+	padding: 0.125em 4px 0.125em 4px;
+	border: 1px solid #eee;
+}
+
+.critic_preview .content {
+	margin-top: 0.5em;
+	padding-left: 5px;
+	border-bottom: 1px solid #eee;
+/*	margin-bottom: 0.5em;*/
+}
+
+.critic_preview .title {
+/*	font-size: 1.1em;*/
+	font-size: 15px;
+}
+
+.critic_preview .sub_title {
+	line-height: 1em;
+	color: #777;
+}
+
+.critic_preview .text {
+	padding-top: 0.8em;
+}
+
+.critic_preview .num_reviews {
+	float:left;
+}
+
+.critic_preview .date {
+	float:right;
+}
+
+/**
+ * Critic Preview
+ */
+
+.theatre_preview {
+	text-align: left;
+	overflow: hidden;
+	margin-left: 10px;
+	margin-right:0;
+	margin-bottom: 1em;
+}
+
+.theatre_preview p {
+	margin-bottom: 0;
+}
+
+.theatre_preview .meta {
+	text-align: center;
+	font-size: 2em;
+	padding: 0.125em 4px 0.125em 4px;
+	border: 1px solid #eee;
+}
+
+.theatre_preview .content {
+	margin-top: 0.5em;
+	padding-left: 5px;
+	border-bottom: 1px solid #eee;
+/*	margin-bottom: 0.5em;*/
+}
+
+.theatre_preview .title {
+/*	font-size: 1.1em;*/
+	font-size: 15px;
+}
+
+.theatre_preview .sub_title {
+	line-height: 1em;
+	color: #777;
+}
+
+.theatre_preview .text {
+	padding-top: 0.8em;
+}
+
+.theatre_preview .num_reviews {
+	float:left;
+}
+
+.theatre_preview .date {
+	float:right;
+}
+
+/* New On Stage Now box */
+
+#osn_options {
+	margin-top: 0;
+	text-align: center;
+	font-size: 0.9em;
+	line-height: 1.3em;
+	color: #bbb;
+}
+
+#osn_options a {
+	color: #bbb;
+}
+
+#osn_options .selected {
+	color: #333;
+}
+
+#review_selector {
+	border-bottom : 1px solid #ccc;
+	margin : 0;
+	padding-bottom : 29px;
+	padding-left : 10px;
+}
+
+#review_selector ul, #review_selector li {
+	display : inline;
+	list-style-type : none;
+	margin : 0;
+	padding : 0;
+}
+
+#review_selector a {
+	background : #E8EBF0;
+	border : 1px solid #ccc;
+	color : #666;
+	float : left;
+	font-size : 1.5em;
+	font-weight : normal;
+	line-height : 14px;
+	margin-right : 8px;
+	padding : 7px 10px 7px 10px;
+	text-decoration : none;
+}
+
+#review_selector a.selected {
+	background : #fff;
+	border-bottom : 1px solid #fff;
+	color : #000;
+}
+
+/** Menu and Buttons **/
+
+div.menu {
+	display: none;
+	position: absolute;
+	margin-left: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	background-color: #fff;
+	z-index: 100;
+}
+
+div.menu.active .button, .button.dark {
+	border: 1px solid #aaa;
+	background-color: #ddd;
+}
+
+.button {
+	padding: 3px;
+	border: 1px solid #bbb;
+	background-color: #eee;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+div.menu.active .button.green, .button.green {
+	border: 1px solid #6b6;
+	background-color: #8e8;
+}
+
+div.menu.active .button.red, .button.red {
+	border: 1px solid #c77;
+	background-color: #f99;
+}
+
+div.menu.active .button.yellow, .button.yellow {
+	border: 1px solid #dd6;
+	background-color: #ff8;
+}
+
+div.menu.active .button.selected, .button.selected {
+	border-style: inset;
+	border-width: 2px;
+}
+
+div.menu.active .button.disabled, .button.disabled {
+	cursor: auto;
+}
+
+/* Fix for markitup buttons appearing above drop downs */
+div.auto_complete {
+  z-index: 99;
+}

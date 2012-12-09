@@ -1,0 +1,9 @@
+<div class="news_item_title">
+	<%= link_to post.title, post %>
+</div>
+<div class="news_item_date">
+	<%= "Posted by #{post.user.name} at #{strftime(post.original_published_at, "%x")}" %>
+</div>
+<div class="news_item_body">
+	<%= simple_format(truncate_html(post.text, post.cutoff_length, "... " + link_to("(Read More)", post))) %>
+</div>

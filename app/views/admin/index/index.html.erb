@@ -1,0 +1,39 @@
+<h2>Administration</h2>
+<hr />
+
+<% _outer_div_span = 24 %>
+<% _inner_div_span = 8 %>
+<% _outer_div_span = outer_div_span if defined?(outer_div_span) %>
+<% _inner_div_span = inner_div_span if defined?(inner_div_span) %>
+<% _outer_div_span = _inner_div_span * 2 + 1 if _outer_div_span < _inner_div_span * 2 + 1 %>
+
+
+<% @groups.each_index do |i| %>
+	<% group_len = @groups[i].map{ |r| r.is_a?(Array) ? r.length : 2 }.sort.last %>
+	<% _inner_div_span = _outer_div_span / group_len %>
+	<% @groups[i].each do |row| %>
+		<div class="span-<%= _outer_div_span %>">
+			<% if row.is_a? String %>
+				<%= admin_links([{:model => row.downcase.to_s, :action => :new },
+						{:model => row.downcase.to_s, :action => :index}],
+						:wrap_each => [[:div, {:class => "span-#{_inner_div_span} last"}], :h2]) %><br />
+			<% else %>
+				<%= admin_links(row, :wrap_each => [[:div, {:class => "span-#{_inner_div_span} last"}], :h2]) %>
+			<% end %>
+		</div>
+	<% end %>
+	<% unless i == @groups.length - 1 %>
+		<hr class="space" />
+		<hr />
+	<% end %>
+<% end %>
+
+<hr />
+<h2>System Admin</h2>
+<%= link_to "View Log", "admin_log_path" %><br />
+<%= link_to "Environment Variables", "system_admin_variables_path" %><br />
+Clear Cache : <%= link_to "All", "admin_clear_cache_path(:cache => :all, :method => :post)" %> |
+<%= link_to "Panels", "admin_clear_cache_path(:cache => :panels, :method => :post)" %> |
+<%= link_to "Grade/Buy Buttons", "admin_clear_cache_path(:cache => :grade_buy_buttons, :method => :post)" %><br />
+
+

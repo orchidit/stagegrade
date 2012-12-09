@@ -1,0 +1,34 @@
+<% content_for :title, "Unsubscribe From Our Newsletter" %>
+
+<style>
+label {
+	font-weight: normal;
+}
+</style>
+
+<h2>Unsubscribe From Our Newsletter</h2>
+
+<hr />
+
+<div class="center" style="font-size: 1.2em">
+	We're sorry to see you go!
+</div>
+
+<br />
+
+<% form_for @email, :url => do_unsubscribe_email_list_path do |f| %>
+	<div class="center">
+		<%= f.error_messages %>
+		<%= f.label(:address, "Email address") + nbsp(2) + f.text_field(:address) %>
+		<%= nbsp(2) + f.submit("Unsubscribe") %>
+	</div>
+<% end %>
+
+
+<script type="text/javascript">
+	arr = window.location.search.substring(1).split("&");
+	hash = {};
+	for (i=0; i < arr.length;i++){ a=arr[i].split("="); hash[a[0]] = a[1] }
+	$("#email_source").val(hash["source"]);
+	$("#email_address").val(hash["address"]);
+</script>

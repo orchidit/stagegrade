@@ -1,0 +1,13 @@
+<table>
+	<tr>
+		<th>Play Title</th><th>Score</th>
+	</tr>
+	<% scores.each do |score| %>
+	<tr>
+		<td width="80%"><%= link_to score[0].title, score[0] %></td>
+		<td width="20%"><%= content_tag(:h2, score[1]) %></td>
+	</tr>
+	<%= tr "" %>
+	<%= tr link_to("See all...", reviews_path) %>
+	<% end %>
+</table>

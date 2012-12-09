@@ -1,0 +1,52 @@
+<style>
+	.form td:first-child, .fieldWithErrors {
+		width: 200px;
+		text-align: right;
+	}
+
+	.form td:first-child, .form td:first-child .fieldWithErrors {
+		float:right;
+	}
+	
+	.fieldWithErrors {
+		clear:both;
+	}
+
+	.form td label {
+		font-weight: normal;
+	}
+	textarea {
+		height: auto;
+	}
+</style>
+
+<%= include_markitup("#review_text") %>
+
+<table class="form">
+<%= tr form.hidden_field(:posted_by_id, :value => @review.posted_by_id || @current_user.id), "" %>
+<%= tr form.label(:production_play_title), text_field_with_auto_complete(:review, :production_description) %>
+<%= tr form.label(:critic_name), text_field_with_auto_complete(:review, :critic_name) %>
+<%= tr form.label(:publication), form.collection_select(:publication_id,
+	Publication.all(:order => "name"), :id, :name, { :include_blank => true }) +
+	nbsp(2) + button("Use New", "#", :id => "publication_toggle") %>
+<%= tr form.label(:text), form.text_area(:text, :rows => 6) %>
+<%= tr form.label(:score), form.collection_select(:score, Grading.all, :score, :grade, { :include_blank => true }) %>
+<%= tr form.label(:link_url), form.text_field(:link_url, :style => "width: 60%") %>
+</table>
+<br />
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#publication_toggle").toggle(function() {
+		$("#review_publication_id").replaceWith(
+			"<%= escape_javascript form.text_field(:publication_name) %>");
+		$(this).html("Use Existing");
+		return false;
+	}, function() {
+		$("#review_publication_name").replaceWith(
+			"<%= escape_javascript form.collection_select(:publication_id, Publication.all(:order => 'name'), :id, :name, { :include_blank => true }) %>");
+		$(this).html("Use New");
+		return false;
+	});
+});
+</script>

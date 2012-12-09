@@ -1,0 +1,107 @@
+<% grade = reviews = show_snapshot = nil %>
+<% if params[:show].nil? or params[:show] == "critics" %>
+	<% grade = @production.median_grade; reviews = @production.reviews; show_snapshot = true %>
+<% elsif params[:show] == "friends" %>
+	<% grade = @production.median_friends_grade(current_user); reviews = @production.friend_reviews(current_user); show_snapshot = false %>
+<% else %>
+	<% grade = @production.median_user_grade; reviews = @production.user_reviews; show_snapshot = false %>
+<% end %>
+
+<!-- Grades and Charts -->
+<div id="grade" class="prepend-2 span-12">
+	<div class="span-4 center" style="vertical-align:middle; margin-top:2px">
+		<% if current_user.nil? or !current_user.has_reviewed? @production.id %>
+			<% link_to new_production_user_review_url(@production) do %>
+				<%= image_tag "grade_it140.png", :alt => "Grade It", :title => "Grade It",
+					:width => "90px", :style => "margin-left:3px" %>
+			<% end %>
+		<% else %>
+			<div style="height:4px">&nbsp;</div>
+		<% end %>
+		<br />
+
+		<% link_to "#", :class => "popup", "data-top-adjust" => -40, :name => "buy-tickets" do %>
+			<%= image_tag("buy_tickets140.png", :alt => "Click for ticket options",
+					:title => "Click for ticket options") %>
+		<% end %>
+	</div>
+
+	<div class="menu buy-tickets-menu-container" id="buy-tickets">
+		<div class="callout-left"></div>
+		<div class="buy-tickets-menu">
+			<%= broadway_com_callout_links(@production) %>
+			<%= ticket_callout_link(@production) %>
+			<%= no_tickets_callout_link(@production) %>
+		</div>
+	</div>
+
+	<div id="median_grade" class="span-3">
+		<div class="ui-state-default">Median Grade</div>
+		<h1><%= grade %></h1>
+		<div class="ui-state-default"><%= pluralize reviews.length, "Review" %></div>
+	</div>
+
+	<div id="median_grade_chart" style="float:left">
+	</div>
+	<%= gchart("#median_grade_chart", reviews.map(&:score)) %>
+</div>
+<hr class="space" />
+
+<!-- Relationships -->
+<div style="text-align:center">
+	<% if @production.grouped_relationships.length == 0 and !@production.byline.empty? %>
+		<%= @production.byline %>
+	<% else %>
+		<% @production.grouped_relationships.each do |conn, array| %>
+			<%= "<em>#{conn.capitalize}</em>: #{array.map{|r| r.participant.name}.join(", ")}." %>
+		<% end %>
+	<% end %>
+	<hr class="space" />
+</div>
+
+<div class="prepend-1 append-1">
+	<!-- Synopsis -->
+	<% if !@production.synopsis.empty? %>
+		<b>Synopsis</b><br />
+		<%= @production.synopsis %>
+	<% end %>
+
+	<% if show_snapshot %>
+		<hr class="space" />
+		<!-- Critical Snapshot -->
+		<b>Critical Snapshot</b>
+		<% if !@production.editorial_summary.empty? %>
+			<%= "<br /><em>By #{@production.posted_by.name_with_title}</em>" if @production.posted_by %><br />
+			<%= @production.editorial_summary %>
+		<% else %>
+			 <%= "No Snapshot Available" %>
+		<% end %>
+	<% end %>
+</div>
+
+<hr class="space" />
+<hr />
+
+<!-- Reviews -->
+<div id="reviews">
+	<% if current_user.nil? or !current_user.has_reviewed? @production.id %>
+		<div class="notice" style="text-align:center; margin-top:-0.5em; padding-bottom:0.5em">
+			Did you see <em><%= @production.play_title %></em>?
+			<%= link_to "Write your own review!", new_production_user_review_url(@production) %>
+		</div>
+	<% end %>
+	<div id="review_list">
+		<% if params[:show].nil? or params[:show] == "critics" %>
+			<%= render :partial => "reviews/review", :collection => Review.for_production(@production).score_desc.all %>
+		<% elsif current_user && params[:show] == "friends" %>
+			<div class="notice" style="text-align:center; margin-top:-0.5em; padding-bottom:0.5em">
+				None of your Facebook friends have reviewed this production yet!
+			</div>
+			<%= render :partial => "user_reviews/user_review",
+				:collection => UserReview.for_production(@production).from_friends_of(current_user).score_desc %>
+        <% else %>
+			<%= render :partial => "user_reviews/user_review",
+				:collection => UserReview.for_production(@production).score_desc.all %>
+        <% end %>
+	</div>
+</div>

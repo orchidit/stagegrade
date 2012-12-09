@@ -1,0 +1,17 @@
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Order</th>
+		<th>Title</th>
+		<th>Created At</th>
+		<th>Updated At</th>
+		<th></th>
+	</tr>
+<% @panels.each do |panel| %>
+	<%= tr panel.id.to_s, panel.order_seq.to_s, link_to(panel.title, edit_admin_panel_path(panel)),
+		panel.created_at.strftime("%x %I:%M %p"), panel.updated_at.strftime("%x %I:%M %p"),
+		button("Move Up", move_up_admin_panel_path(panel), :method => :post, :suppress_confirm => true),
+		button("Move Down", move_down_admin_panel_path(panel), :method => :post, :suppress_confirm => true),
+		red_button("Delete", admin_panel_path(panel), :method => :delete) %>
+<% end %>
+</table>

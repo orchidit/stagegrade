@@ -1,0 +1,8 @@
+<h1>Editing Participant #<%= @participant.id %></h1>
+
+<% form_for @participant, :url => admin_participant_path(@participant) do |f| %>
+	<%= f.error_messages %>
+	<%= f.label(:name) + "  " + f.text_field(:name) %>
+	<%= f.check_box(:is_person) + f.label(:is_person) %><br />
+	<%= f.submit "Update" %>
+<% end %>

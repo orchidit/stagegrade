@@ -1,0 +1,5 @@
+<% content_for :title, "#{@page.title}" %>
+
+<%= @page.body %>
+
+<div id="current_user" style="display:none"><%= current_user.nil? ? "" : current_user.id %></div>

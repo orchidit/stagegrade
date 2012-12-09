@@ -1,0 +1,21 @@
+<% content_for :title, "#{@post.title}" %>
+
+<div class="prepend-1 span-18">
+	<h2>
+		<%= @post.title %>
+		<% if is_admin and !@post.is_published %>
+			<span class="highlight">Unpublished</span>
+		<% end %>
+	</h2>
+	<div id="meta"><%= "Posted by #{@post.user.name} at #{strftime(@post.original_published_at, "%x")}" %></div>
+	<hr />
+	<div id="body">
+		<% if is_admin and @post.has_cutoff? %>
+			<h3>Home Page Preview</h3><br />
+				<%= simple_format(truncate_html(@post.text, @post.cutoff_length, "... " + link_to("(Read More)", @post))) %>
+			<hr />
+			<h3>Full Text</h3><br />
+		<% end %>
+		<%= simple_format(@post.text) %>
+	</div>
+</div>
